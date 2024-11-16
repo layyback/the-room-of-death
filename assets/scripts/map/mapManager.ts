@@ -11,7 +11,7 @@ import {
   randomRangeInt
 } from "cc";
 const { ccclass, property } = _decorator;
-import { mapInfo } from "./level1";
+import { mapInfo } from "../game/level1";
 import { loadReources } from "../utils";
 
 @ccclass("mapManager")
@@ -24,7 +24,7 @@ export class mapManager extends Component {
 
   async generateMap() {
     const tileList = await loadReources("texture/tile/tile");
-    console.log(tileList);
+    // console.log(tileList);
 
     mapInfo.forEach((row, rowIndex) => {
       row.forEach((tile, colIndex) => {
