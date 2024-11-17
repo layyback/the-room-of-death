@@ -1,15 +1,4 @@
-enum TILE_TYPE_ENUM {
-  WALL_ROW = "WALL_ROW",
-  WALL_COLUMN = "WALL_COLUMN",
-  WALL_LEFT_TOP = "WALL_LEFT_TOP",
-  WALL_RIGHT_TOP = "WALL_RIGHT_TOP",
-  WALL_LEFT_BOTTOM = "WALL_LEFT_BOTTOM",
-  WALL_RIGHT_BOTTOM = "WALL_RIGHT_BOTTOM",
-  CLIFF_LEFT = "CLIFF_ROW_START",
-  CLIFF_CENTER = "CLIFF_ROW_CENTER",
-  CLIFF_RIGHT = "CLIFF_ROW_END",
-  FLOOR = "FLOOR"
-}
+import { TileType } from "../utils/enum";
 
 export const mapInfo = [
   [
@@ -31,195 +20,195 @@ export const mapInfo = [
     },
     {
       src: 16,
-      type: TILE_TYPE_ENUM.WALL_LEFT_TOP
+      type: TileType.WALL_LEFT_TOP
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 13,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 18,
-      type: TILE_TYPE_ENUM.CLIFF_LEFT
+      type: TileType.CLIFF_LEFT
     }
   ],
   [
     {
       src: 16,
-      type: TILE_TYPE_ENUM.WALL_LEFT_TOP
+      type: TileType.WALL_LEFT_TOP
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 14,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 21,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 17,
-      type: TILE_TYPE_ENUM.CLIFF_CENTER
+      type: TileType.CLIFF_CENTER
     }
   ],
   [
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 17,
-      type: TILE_TYPE_ENUM.CLIFF_CENTER
+      type: TileType.CLIFF_CENTER
     }
   ],
   [
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 16,
-      type: TILE_TYPE_ENUM.WALL_LEFT_TOP
+      type: TileType.WALL_LEFT_TOP
     },
     {
       src: 13,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 20,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 17,
-      type: TILE_TYPE_ENUM.CLIFF_CENTER
+      type: TileType.CLIFF_CENTER
     }
   ],
   [
     {
       src: 15,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_TOP
+      type: TileType.WALL_RIGHT_TOP
     },
     {
       src: 13,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 15,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_TOP
+      type: TileType.WALL_RIGHT_TOP
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 14,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 19,
-      type: TILE_TYPE_ENUM.CLIFF_RIGHT
+      type: TileType.CLIFF_RIGHT
     }
   ],
   [
@@ -229,207 +218,212 @@ export const mapInfo = [
     },
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 16,
-      type: TILE_TYPE_ENUM.WALL_LEFT_TOP
+      type: TileType.WALL_LEFT_TOP
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 13,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 18,
-      type: TILE_TYPE_ENUM.CLIFF_LEFT
+      type: TileType.CLIFF_LEFT
     }
   ],
   [
     {
       src: 16,
-      type: TILE_TYPE_ENUM.WALL_LEFT_TOP
+      type: TileType.WALL_LEFT_TOP
     },
     {
       src: 14,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 15,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_TOP
+      type: TileType.WALL_RIGHT_TOP
     },
     {
       src: 14,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 21,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 19,
-      type: TILE_TYPE_ENUM.CLIFF_RIGHT
+      type: TileType.CLIFF_RIGHT
     }
   ],
   [
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 17,
-      type: TILE_TYPE_ENUM.CLIFF_CENTER
+      type: TileType.CLIFF_CENTER
     }
   ],
   [
     {
       src: 9,
-      type: TILE_TYPE_ENUM.WALL_ROW
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 16,
-      type: TILE_TYPE_ENUM.WALL_LEFT_TOP
+      type: TileType.WALL_LEFT_TOP
     },
     {
       src: 13,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 1,
-      type: TILE_TYPE_ENUM.FLOOR
+      type: TileType.FLOOR
     },
     {
       src: 20,
-      type: TILE_TYPE_ENUM.WALL_LEFT_BOTTOM
+      type: TileType.WALL_LEFT_BOTTOM
     },
     {
       src: 17,
-      type: TILE_TYPE_ENUM.CLIFF_CENTER
+      type: TileType.CLIFF_CENTER
     }
   ],
   [
     {
       src: 15,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_TOP
+      type: TileType.WALL_RIGHT_TOP
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 14,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 15,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_TOP
+      type: TileType.WALL_RIGHT_TOP
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 5,
-      type: TILE_TYPE_ENUM.WALL_COLUMN
+      type: TileType.WALL_COLUMN
     },
     {
       src: 14,
-      type: TILE_TYPE_ENUM.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
       src: 19,
-      type: TILE_TYPE_ENUM.CLIFF_RIGHT
+      type: TileType.CLIFF_RIGHT
     }
   ]
 ];
+
+export const playerInfo = {
+  x: 2,
+  y: 8
+};

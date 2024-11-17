@@ -1,5 +1,6 @@
 enum MessageType {
-  Move
+  Move,
+  InitPlayer
 }
 
 class MessageCenter {
