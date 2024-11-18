@@ -101,6 +101,7 @@ export abstract class entityHandler extends Component {
       case MoveDirection.RIGHT:
         this.currentDirection = direction;
         this.animationComponent.play(direction);
+        this.isMoving = false;
         break;
       case MoveDirection.TURNLEFT:
         switch (this.currentDirection) {
@@ -207,6 +208,8 @@ export abstract class entityHandler extends Component {
     }
   }
   onAttack(attackDirection: AttackDirection) {
+    if (this.isMoving) return;
+    this.isMoving = true;
     this.animationComponent.play(attackDirection);
   }
 }
