@@ -9,6 +9,13 @@ export enum MoveDirection {
   TURNRIGHT = "TURNRIGHT"
 }
 
+export enum AttackDirection {
+  ATTACKTOP = "ATTACKTOP",
+  ATTACKBOTTOM = "ATTACKBOTTOM",
+  ATTACKLEFT = "ATTACKLEFT",
+  ATTACKRIGHT = "ATTACKRIGHT"
+}
+
 export enum PlayerState {
   TOP = "TOP",
   BOTTOM = "BOTTOM",
@@ -22,6 +29,17 @@ export enum PlayerState {
   TURNRIGHTRIGHT = "TURNRIGHTRIGHT",
   TURNRIGHTBOTTOM = "TURNRIGHTBOTTOM",
   TURNRIGHTLEFT = "TURNRIGHTLEFT"
+}
+
+export enum EnemyState {
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+  ATTACKTOP = "ATTACKTOP",
+  ATTACKLEFT = "ATTACKLEFT",
+  ATTACKBOTTOM = "ATTACKBOTTOM",
+  ATTACKRIGHT = "ATTACKRIGHT"
 }
 
 export enum TileType {

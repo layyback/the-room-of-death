@@ -427,3 +427,14 @@ export const playerInfo = {
   x: 2,
   y: 8
 };
+
+export const enemyInfo = [
+  {
+    x: 2,
+    y: 6
+  },
+  {
+    x: 7,
+    y: 6
+  }
+];

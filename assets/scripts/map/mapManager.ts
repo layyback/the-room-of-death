@@ -14,7 +14,7 @@ import {
   ERigidBody2DType
 } from "cc";
 const { ccclass, property } = _decorator;
-import { mapInfo, playerInfo } from "../game/level1";
+import { enemyInfo, mapInfo, playerInfo } from "../game/level1";
 import { loadReources } from "../utils";
 import { TileType, TileSize } from "../utils/enum";
 import { MessageType, messageCenter } from "../game/messageCenter";
@@ -58,22 +58,40 @@ export class mapManager extends Component {
             -colIndex * this.tileSize
           );
           tileNode.setParent(this.node);
-          if (playerInfo.x === rowIndex && playerInfo.y === colIndex) {
-            this.generatePlayer({
-              point: {
-                x: rowIndex,
-                y: colIndex
-              },
-              position: tileNode.getWorldPosition()
-            });
-          }
+
+          // 生成玩家
+          this.generatePlayer({ tileNode, rowIndex, colIndex });
+          // 生成敌人
+          this.generateEnemy({ tileNode, rowIndex, colIndex });
         }
       });
     });
   }
 
-  generatePlayer(info) {
-    messageCenter.publish(MessageType.InitPlayer, info);
+  generatePlayer({ tileNode, rowIndex, colIndex }) {
+    if (playerInfo.x === rowIndex && playerInfo.y === colIndex) {
+      messageCenter.publish(MessageType.InitPlayer, {
+        point: {
+          x: rowIndex,
+          y: colIndex
+        },
+        position: tileNode.getWorldPosition()
+      });
+    }
+  }
+
+  generateEnemy({ tileNode, rowIndex, colIndex }) {
+    enemyInfo.forEach(enemy => {
+      if (enemy.x === rowIndex && enemy.y === colIndex) {
+        messageCenter.publish(MessageType.InitEnemy, {
+          point: {
+            x: rowIndex,
+            y: colIndex
+          },
+          position: tileNode.getWorldPosition()
+        });
+      }
+    });
   }
 
   update(deltaTime: number) {}

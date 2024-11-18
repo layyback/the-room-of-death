@@ -1,6 +1,8 @@
 enum MessageType {
   Move,
-  InitPlayer
+  onMove,
+  InitPlayer,
+  InitEnemy
 }
 
 class MessageCenter {
@@ -24,7 +26,6 @@ class MessageCenter {
 
   publish(type: MessageType, data: unknown) {
     console.log("消息中心发布了：", type, data);
-    console.log("this.subscribers", this.subscribers);
 
     if (this.subscribers.has(type)) {
       this.subscribers.get(type)?.forEach(callback => {

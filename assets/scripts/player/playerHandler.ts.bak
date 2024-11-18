@@ -15,13 +15,14 @@ import {
   BoxCollider2D,
   RigidBody2D,
   ERigidBody2DType,
-  UITransform
+  UITransform,
+  Size
 } from "cc";
 const { ccclass, property } = _decorator;
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "../game/messageCenter";
 import { MoveDirection, PlayerState, TileSize, TileType } from "../utils/enum";
-import { StateManager } from "./stateManager";
+import { StateManager } from "../common/stateManager";
 import { playerInfo, mapInfo } from "../game/level1";
 
 interface IStateMap {
@@ -29,8 +30,9 @@ interface IStateMap {
   wrapMode: AnimationClip.WrapMode;
 }
 
-@ccclass("playerManager")
-export class playerManager extends Component {
+@ccclass("playerHandler")
+export class playerHandler extends Component {
+  player: Node;
   moveStep: number = TileSize;
   isMoving: boolean = false;
   currentDirection: MoveDirection = MoveDirection.TOP;
@@ -89,26 +91,32 @@ export class playerManager extends Component {
   };
 
   async start() {
-    this.animationComponent = this.addComponent(Animation);
     this.initPlayer();
     this.initControl();
-    await this.initPlayerAnimations();
-    this.animationComponent.play(PlayerState.TOP);
-    this.animationComponent.on(
-      Animation.EventType.FINISHED,
-      this.onAnimationFinished,
-      this
-    );
   }
 
   initPlayer() {
     messageCenter.subscribe(
       MessageType.InitPlayer,
-      ({ point, position }) => {
+      async ({ point, position }) => {
+        const player = new Node("player");
+        player.parent = this.node;
+        player.addComponent(UITransform).contentSize = new Size(260, 260);
+        const sprite = player.addComponent(Sprite);
+        sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        this.animationComponent = player.addComponent(Animation);
+        this.player = player;
         const x = position.x;
         const y = position.y;
-        this.node.setWorldPosition(new Vec3(x, y, 0));
+        player.setWorldPosition(new Vec3(x, y, 0));
         this.currentPoint = point;
+        await this.initPlayerAnimations();
+        this.animationComponent.play(PlayerState.TOP);
+        this.animationComponent.on(
+          Animation.EventType.FINISHED,
+          this.onAnimationFinished,
+          this
+        );
       },
       this
     );
@@ -189,20 +197,123 @@ export class playerManager extends Component {
   checkCanMove(direction: MoveDirection) {
     let tileInfo;
     const currentDirection = this.currentDirection;
-    const len = currentDirection === direction ? 2 : 1;
     switch (direction) {
       case MoveDirection.TOP:
-        tileInfo = mapInfo[this.currentPoint.x][this.currentPoint.y - len];
-        return tileInfo?.type === TileType.FLOOR;
+        switch (currentDirection) {
+          case MoveDirection.TOP:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y - 2]?.type ===
+              TileType.FLOOR
+            );
+          case MoveDirection.LEFT:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
+                ?.type === TileType.FLOOR
+            );
+          case MoveDirection.BOTTOM:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
+              TileType.FLOOR
+            );
+          case MoveDirection.RIGHT:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
+                ?.type === TileType.FLOOR
+            );
+          default:
+            break;
+        }
       case MoveDirection.BOTTOM:
-        tileInfo = mapInfo[this.currentPoint.x][this.currentPoint.y + len];
-        return tileInfo?.type === TileType.FLOOR;
+        switch (currentDirection) {
+          case MoveDirection.TOP:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
+              TileType.FLOOR
+            );
+          case MoveDirection.LEFT:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
+                ?.type === TileType.FLOOR
+            );
+          case MoveDirection.BOTTOM:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y + 2]?.type ===
+              TileType.FLOOR
+            );
+          case MoveDirection.RIGHT:
+            return (
+              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
+                ?.type === TileType.FLOOR
+            );
+          default:
+            break;
+        }
       case MoveDirection.LEFT:
-        tileInfo = mapInfo[this.currentPoint.x - len][this.currentPoint.y];
-        return tileInfo?.type === TileType.FLOOR;
+        switch (currentDirection) {
+          case MoveDirection.TOP:
+            return (
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
+                ?.type === TileType.FLOOR
+            );
+          case MoveDirection.LEFT:
+            return (
+              mapInfo[this.currentPoint.x - 2][this.currentPoint.y]?.type ===
+              TileType.FLOOR
+            );
+          case MoveDirection.BOTTOM:
+            return (
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
+                ?.type === TileType.FLOOR
+            );
+          case MoveDirection.RIGHT:
+            return (
+              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
+              TileType.FLOOR
+            );
+          default:
+            break;
+        }
       case MoveDirection.RIGHT:
-        tileInfo = mapInfo[this.currentPoint.x + len][this.currentPoint.y];
-        return tileInfo?.type === TileType.FLOOR;
+        switch (currentDirection) {
+          case MoveDirection.TOP:
+            return (
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
+                ?.type === TileType.FLOOR
+            );
+          case MoveDirection.LEFT:
+            return (
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
+              TileType.FLOOR
+            );
+          case MoveDirection.BOTTOM:
+            return (
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
+                TileType.FLOOR &&
+              mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
+                ?.type === TileType.FLOOR
+            );
+          case MoveDirection.RIGHT:
+            return (
+              mapInfo[this.currentPoint.x + 2][this.currentPoint.y]?.type ===
+              TileType.FLOOR
+            );
+          default:
+            break;
+        }
       case MoveDirection.TURNLEFT:
         switch (currentDirection) {
           case MoveDirection.TOP:
@@ -278,7 +389,6 @@ export class playerManager extends Component {
   }
 
   onMove(direction: MoveDirection) {
-    console.log("onMove", this.isMoving);
     if (this.isMoving) return;
     if (!this.checkCanMove(direction)) return;
 
@@ -286,7 +396,7 @@ export class playerManager extends Component {
     switch (direction) {
       case MoveDirection.TOP:
         this.currentPoint.y -= 1;
-        tween(this.node)
+        tween(this.player)
           .by(0.3, { position: new Vec3(0, 1 * this.moveStep, 0) })
           .call(() => {
             this.isMoving = false;
@@ -300,7 +410,7 @@ export class playerManager extends Component {
         )
           return (this.isMoving = false);
         this.currentPoint.y += 1;
-        tween(this.node)
+        tween(this.player)
           .by(0.3, { position: new Vec3(0, -1 * this.moveStep, 0) })
           .call(() => {
             this.isMoving = false;
@@ -309,7 +419,7 @@ export class playerManager extends Component {
         break;
       case MoveDirection.LEFT:
         this.currentPoint.x -= 1;
-        tween(this.node)
+        tween(this.player)
           .by(0.3, { position: new Vec3(-1 * this.moveStep, 0, 0) })
           .call(() => {
             this.isMoving = false;
@@ -318,7 +428,7 @@ export class playerManager extends Component {
         break;
       case MoveDirection.RIGHT:
         this.currentPoint.x += 1;
-        tween(this.node)
+        tween(this.player)
           .by(0.3, { position: new Vec3(1 * this.moveStep, 0, 0) })
           .call(() => {
             this.isMoving = false;
