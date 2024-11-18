@@ -27,7 +27,8 @@ import {
   PlayerState,
   TileSize,
   TileType,
-  AttackDirection
+  AttackDirection,
+  DeathDirection
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
 import { playerInfo, mapInfo } from "../game/level1";
@@ -72,10 +73,26 @@ export class enemyHandler extends entityHandler {
     [EnemyState.ATTACKRIGHT]: {
       spritePath: "texture/woodenskeleton/attack/right",
       wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [EnemyState.DEATHTOP]: {
+      spritePath: "texture/woodenskeleton/death/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [EnemyState.DEATHBOTTOM]: {
+      spritePath: "texture/woodenskeleton/death/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [EnemyState.DEATHLEFT]: {
+      spritePath: "texture/woodenskeleton/death/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [EnemyState.DEATHRIGHT]: {
+      spritePath: "texture/woodenskeleton/death/right",
+      wrapMode: AnimationClip.WrapMode.Normal
     }
   };
 
-  constructor({ point, position, node }) {
+  constructor({ point, position }) {
     super();
     this.init({ point, position });
   }
@@ -88,9 +105,12 @@ export class enemyHandler extends entityHandler {
       playerDirection: MoveDirection.TOP
     });
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.subscribe(MessageType.onAttacked, this.onAttacked, this);
   }
 
   initAttack({ playerPoint, playerDirection }) {
+    if (this.hasDead) return;
+
     const x = playerPoint.x - this.currentPoint.x;
     const y = playerPoint.y - this.currentPoint.y;
     switch (true) {
@@ -129,5 +149,27 @@ export class enemyHandler extends entityHandler {
     }
 
     // 被攻击
+  }
+
+  onAttacked({ playerPoint, playerDirection, enemyPoint }) {
+    const currentPoint = this.currentPoint;
+    if (currentPoint.x === enemyPoint.x && currentPoint.y === enemyPoint.y) {
+      switch (playerDirection) {
+        case MoveDirection.TOP:
+          this.onDeath(DeathDirection.DEATHBOTTOM);
+          break;
+        case MoveDirection.BOTTOM:
+          this.onDeath(DeathDirection.DEATHTOP);
+          break;
+        case MoveDirection.LEFT:
+          this.onDeath(DeathDirection.DEATHRIGHT);
+          break;
+        case MoveDirection.RIGHT:
+          this.onDeath(DeathDirection.DEATHLEFT);
+          break;
+        default:
+          break;
+      }
+    }
   }
 }

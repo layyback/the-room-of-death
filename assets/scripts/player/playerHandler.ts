@@ -21,10 +21,17 @@ import {
 const { ccclass, property } = _decorator;
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "../game/messageCenter";
-import { MoveDirection, PlayerState, TileSize, TileType } from "../utils/enum";
+import {
+  AttackDirection,
+  MoveDirection,
+  PlayerState,
+  TileSize,
+  TileType
+} from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { playerInfo, mapInfo } from "../game/level1";
+import { playerInfo, mapInfo, enemyInfo } from "../game/level1";
 import { entityHandler } from "../common/entity";
+import { enemyManager } from "../enemy/enemyManager";
 
 interface IStateMap {
   spritePath: string;
@@ -79,6 +86,22 @@ export class playerHandler extends entityHandler {
     },
     [PlayerState.TURNRIGHTLEFT]: {
       spritePath: "texture/player/turnright/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.ATTACKTOP]: {
+      spritePath: "texture/player/attack/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.ATTACKBOTTOM]: {
+      spritePath: "texture/player/attack/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.ATTACKLEFT]: {
+      spritePath: "texture/player/attack/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.ATTACKRIGHT]: {
+      spritePath: "texture/player/attack/right",
       wrapMode: AnimationClip.WrapMode.Normal
     }
   };
@@ -289,10 +312,64 @@ export class playerHandler extends entityHandler {
     }
   }
 
-  checkCanAttack(direction: MoveDirection) {}
+  checkCanAttack(direction: MoveDirection) {
+    const currentPoint = this.currentPoint;
+    const currentDirection = this.currentDirection;
+    if (currentDirection !== direction) return false;
+    let fontPoint = {
+      x: 0,
+      y: 0
+    };
+    switch (direction) {
+      case MoveDirection.TOP:
+        fontPoint = {
+          x: currentPoint.x,
+          y: currentPoint.y - 2
+        };
+        break;
+      case MoveDirection.LEFT:
+        fontPoint = {
+          x: currentPoint.x - 2,
+          y: currentPoint.y
+        };
+        break;
+      case MoveDirection.BOTTOM:
+        fontPoint = {
+          x: currentPoint.x,
+          y: currentPoint.y + 2
+        };
+        break;
+      case MoveDirection.RIGHT:
+        fontPoint = {
+          x: currentPoint.x + 2,
+          y: currentPoint.y
+        };
+        break;
+      default:
+        break;
+    }
+    const enemyList = enemyManager.enemyList;
+    const enemy = enemyList.find(
+      item => !item.hasDead && item.x === fontPoint.x && item.y === fontPoint.y
+    );
+
+    if (enemy) {
+      this.onAttack(AttackDirection[`ATTACK${direction}`]);
+      messageCenter.publish(MessageType.onAttacked, {
+        playerPoint: this.currentPoint,
+        playerDirection: this.currentDirection,
+        enemyPoint: enemy
+      });
+      enemy.hasDead = true;
+      return enemy;
+    }
+
+    return false;
+  }
 
   initMove(direction: MoveDirection) {
     if (!this.checkCanMove(direction)) return;
+    if (this.checkCanAttack(direction)) return;
     this.onMove(direction);
   }
 

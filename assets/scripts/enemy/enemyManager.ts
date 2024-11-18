@@ -33,8 +33,15 @@ import { playerInfo, mapInfo, enemyInfo } from "../game/level1";
 import { entityHandler } from "../common/entity";
 import { enemyHandler } from "./enemyHandler";
 
+interface EnemyInfo {
+  x: number;
+  y: number;
+  hasDead?: boolean;
+}
+
 @ccclass("enemyManager")
 export class enemyManager extends Component {
+  static enemyList: EnemyInfo[] = enemyInfo;
   start() {
     this.initEnemy();
   }
@@ -43,7 +50,7 @@ export class enemyManager extends Component {
     messageCenter.subscribe(
       MessageType.InitEnemy,
       ({ point, position }) => {
-        new enemyHandler({ point, position, node: this.node });
+        new enemyHandler({ point, position });
       },
       this
     );

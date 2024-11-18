@@ -59,10 +59,10 @@ export class mapManager extends Component {
           );
           tileNode.setParent(this.node);
 
-          // 生成玩家
-          this.generatePlayer({ tileNode, rowIndex, colIndex });
           // 生成敌人
           this.generateEnemy({ tileNode, rowIndex, colIndex });
+          // 生成玩家
+          this.generatePlayer({ tileNode, rowIndex, colIndex });
         }
       });
     });

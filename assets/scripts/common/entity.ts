@@ -28,7 +28,8 @@ import {
   EnemyState,
   TileSize,
   TileType,
-  AttackDirection
+  AttackDirection,
+  DeathDirection
 } from "../utils/enum";
 import { StateManager } from "./stateManager";
 import { playerInfo, mapInfo } from "../game/level1";
@@ -43,6 +44,7 @@ export abstract class entityHandler extends Component {
   entity: Node;
   moveStep: number = TileSize;
   isMoving: boolean = false;
+  hasDead: boolean = false;
   currentDirection: MoveDirection = MoveDirection.TOP;
   currentPoint: Record<"x" | "y", number>;
   animationComponent: AnimationComponent;
@@ -90,6 +92,8 @@ export abstract class entityHandler extends Component {
 
   onAnimationFinished() {
     this.isMoving = false;
+    if (this.hasDead) return;
+
     this.animationComponent.play(this.currentDirection);
   }
 
@@ -211,5 +215,11 @@ export abstract class entityHandler extends Component {
     if (this.isMoving) return;
     this.isMoving = true;
     this.animationComponent.play(attackDirection);
+  }
+
+  onDeath(deathDirection: DeathDirection) {
+    if (this.hasDead) return;
+    this.hasDead = true;
+    this.animationComponent.play(deathDirection);
   }
 }
