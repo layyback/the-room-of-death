@@ -45,13 +45,13 @@ export class mapManager extends Component {
     map.parent = this.node;
     map.layer = Layers.Enum.UI_2D;
     const mapUI = map.addComponent(UITransform);
-    // mapUI.contentSize = new Size(550, 550);
+
     mapUI.setAnchorPoint(0.5, 0.5);
 
     const tileList = await loadReources("texture/tile/tile");
     const mapInfo = Game.levelInfo.mapInfo;
-    map.setPosition(0, 320);
-    // map.setPosition(-this.tileSize * (mapInfo.length / 2), 320);
+
+    map.setPosition(-this.tileSize * ((mapInfo.length - 1) / 2), 320);
     mapInfo.forEach((row, rowIndex) => {
       row.forEach((tile, colIndex) => {
         // 根据tile的值生成对应的地图元素
