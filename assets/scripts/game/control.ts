@@ -13,7 +13,6 @@ import {
   Event
 } from "cc";
 const { ccclass, property } = _decorator;
-import { mapInfo } from "../game/level1";
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "./messageCenter";
 import { MoveDirection } from "../utils/enum";

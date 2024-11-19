@@ -30,9 +30,9 @@ import {
   TileType
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { playerInfo, mapInfo, enemyInfo } from "../game/level1";
 import { entityHandler } from "../common/entity";
 import { enemyManager } from "../enemy/enemyManager";
+import { Game } from "../game/game";
 
 interface IStateMap {
   spritePath: string;
@@ -134,6 +134,8 @@ export class playerHandler extends entityHandler {
   }
 
   initControl() {
+    console.log("init control");
+
     messageCenter.subscribe(MessageType.Move, this.initMove, this);
   }
 
@@ -145,7 +147,9 @@ export class playerHandler extends entityHandler {
   }
 
   checkCanMove(direction: MoveDirection) {
+    if (this.isMoving) return;
     const currentDirection = this.currentDirection;
+    const mapInfo = Game.levelInfo.mapInfo;
 
     switch (direction) {
       case MoveDirection.TOP:
@@ -181,7 +185,7 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
+              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
               TileType.FLOOR
             );
           case MoveDirection.LEFT:
@@ -412,6 +416,8 @@ export class playerHandler extends entityHandler {
       y: fontPoint.y
     });
 
+    console.log("check attack", enemy, fontPoint);
+
     if (enemy) {
       this.onAttack(AttackDirection[`ATTACK${direction}`]);
       messageCenter.publish(MessageType.onAttacked, {
@@ -439,19 +445,20 @@ export class playerHandler extends entityHandler {
   }
 
   initMove(direction: MoveDirection) {
+    console.log("move", this.hasDead, this.checkCanMove(direction));
+
     if (this.hasDead) return;
     if (!this.checkCanMove(direction)) return;
     if (this.checkCanAttack(direction)) return;
     this.onMove(direction);
   }
 
-  onMove(direction: MoveDirection): boolean {
+  onMove(direction: MoveDirection) {
     super.onMove(direction);
     messageCenter.publish(MessageType.onMove, {
       playerPoint: this.currentPoint,
       playerDirection: this.currentDirection
     });
-    return;
   }
 
   update(deltaTime: number) {}

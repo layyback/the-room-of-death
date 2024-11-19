@@ -31,8 +31,8 @@ import {
   DeathDirection
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { playerInfo, mapInfo } from "../game/level1";
 import { entityHandler } from "../common/entity";
+import { Game } from "../game/game";
 
 interface IStateMap {
   spritePath: string;
@@ -101,7 +101,7 @@ export class enemyHandler extends entityHandler {
     super.init({ point, position });
 
     this.initAttack({
-      playerPoint: playerInfo,
+      playerPoint: Game.levelInfo.playerInfo,
       playerDirection: MoveDirection.TOP
     });
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);

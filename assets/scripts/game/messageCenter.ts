@@ -4,7 +4,9 @@ enum MessageType {
   onAttacked,
   onPlayerAttacked,
   InitPlayer,
-  InitEnemy
+  InitEnemy,
+  InitDoor,
+  nextLevel
 }
 
 class MessageCenter {

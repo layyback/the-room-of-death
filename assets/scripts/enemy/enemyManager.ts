@@ -29,9 +29,9 @@ import {
   TileType
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { playerInfo, mapInfo, enemyInfo } from "../game/level1";
 import { entityHandler } from "../common/entity";
 import { enemyHandler } from "./enemyHandler";
+import { Game } from "../game/game";
 
 interface EnemyInfo {
   x: number;
@@ -41,8 +41,9 @@ interface EnemyInfo {
 
 @ccclass("enemyManager")
 export class enemyManager extends Component {
-  static enemyList: EnemyInfo[] = enemyInfo;
+  static enemyList: EnemyInfo[];
   start() {
+    enemyManager.enemyList = Game.levelInfo.enemyInfo;
     this.initEnemy();
   }
 
@@ -50,6 +51,7 @@ export class enemyManager extends Component {
     messageCenter.subscribe(
       MessageType.InitEnemy,
       ({ point, position }) => {
+        enemyManager.enemyList = Game.levelInfo.enemyInfo;
         new enemyHandler({ point, position });
       },
       this

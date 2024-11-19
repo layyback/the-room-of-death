@@ -76,3 +76,8 @@ export enum TileType {
   CLIFF_RIGHT = "CLIFF_ROW_END",
   FLOOR = "FLOOR"
 }
+
+export enum DoorState {
+  OPEN = "OPEN",
+  CLOSE = "CLOSE"
+}

@@ -32,7 +32,6 @@ import {
   DeathDirection
 } from "../utils/enum";
 import { StateManager } from "./stateManager";
-import { playerInfo, mapInfo } from "../game/level1";
 
 interface IStateMap {
   spritePath: string;
@@ -59,7 +58,7 @@ export abstract class entityHandler extends Component {
     this.onChangeDirection(direction);
   }
 
-  async init({ point, position }) {
+  async init({ point, position, direction = MoveDirection.TOP }) {
     const player = new Node();
     player.parent = find("Canvas/background");
     player.addComponent(UITransform).contentSize = new Size(240, 240);
@@ -71,6 +70,9 @@ export abstract class entityHandler extends Component {
     const y = position.y;
     player.setWorldPosition(new Vec3(x, y, 0));
     this.currentPoint = point;
+    this.isMoving = false;
+    this.hasDead = false;
+    this.direction = direction;
     await this.initAnimations();
     this.animationComponent.play(this.currentDirection);
     this.animationComponent.on(
@@ -93,7 +95,6 @@ export abstract class entityHandler extends Component {
   onAnimationFinished() {
     this.isMoving = false;
     if (this.hasDead) return;
-
     this.animationComponent.play(this.currentDirection);
   }
 
@@ -157,8 +158,7 @@ export abstract class entityHandler extends Component {
     }
   }
 
-  onMove(direction: MoveDirection): boolean {
-    if (this.isMoving) return;
+  onMove(direction: MoveDirection): void {
     this.isMoving = true;
 
     switch (direction) {
@@ -172,11 +172,6 @@ export abstract class entityHandler extends Component {
           .start();
         break;
       case MoveDirection.BOTTOM:
-        if (
-          mapInfo[this.currentPoint.x][this.currentPoint.y + 1].type !==
-          TileType.FLOOR
-        )
-          return (this.isMoving = false);
         this.currentPoint.y += 1;
         tween(this.entity)
           .by(0.3, { position: new Vec3(0, -1 * this.moveStep, 0) })
