@@ -43,13 +43,17 @@ interface IStateMap {
 @ccclass("doorHandler")
 export class doorHandler extends Component {
   entity: Node;
-  currentState: DoorState = DoorState.CLOSE;
+  currentState: DoorState = DoorState.CLOSETOP;
   currentPoint: Record<"x" | "y", number>;
   animationComponent: AnimationComponent;
 
   stateMap: Record<string, IStateMap> = {
-    [DoorState.CLOSE]: {
+    [DoorState.CLOSETOP]: {
       spritePath: "texture/door/idle/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [DoorState.CLOSELEFT]: {
+      spritePath: "texture/door/idle/left",
       wrapMode: AnimationClip.WrapMode.Normal
     },
     [DoorState.OPEN]: {
@@ -72,7 +76,7 @@ export class doorHandler extends Component {
     messageCenter.subscribe(MessageType.onMove, this.onMove, this);
   }
 
-  async init({ point, position }) {
+  async init({ point, position, direction }) {
     const player = new Node("door");
     player.parent = find("Canvas/background");
     player.addComponent(UITransform).contentSize = new Size(240, 240);
@@ -85,7 +89,7 @@ export class doorHandler extends Component {
     player.setWorldPosition(new Vec3(x, y, 0));
     this.currentPoint = point;
     await this.initAnimations();
-    this.state = DoorState.CLOSE;
+    this.state = direction;
   }
 
   async initAnimations() {

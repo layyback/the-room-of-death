@@ -79,5 +79,6 @@ export enum TileType {
 
 export enum DoorState {
   OPEN = "OPEN",
-  CLOSE = "CLOSE"
+  CLOSELEFT = "CLOSELEFT",
+  CLOSETOP = "CLOSETOP"
 }

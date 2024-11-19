@@ -1,4 +1,4 @@
-import { PlayerState, TileType } from "../utils/enum";
+import { DoorState, PlayerState, TileType } from "../utils/enum";
 
 export const mapInfo = [
   [
@@ -468,5 +468,6 @@ export const enemyInfo = [
 
 export const doorInfo = {
   x: 6,
-  y: 0
+  y: 0,
+  direction: DoorState.CLOSETOP
 };

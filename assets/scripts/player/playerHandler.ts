@@ -19,7 +19,7 @@ import {
   Size
 } from "cc";
 const { ccclass, property } = _decorator;
-import { loadReources } from "../utils";
+import { loadReources, isWall } from "../utils";
 import { MessageType, messageCenter } from "../game/messageCenter";
 import {
   AttackDirection,
@@ -155,28 +155,30 @@ export class playerHandler extends entityHandler {
       case MoveDirection.TOP:
         switch (currentDirection) {
           case MoveDirection.TOP:
-            return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 2]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 2]
             );
           case MoveDirection.LEFT:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y - 1]
+              )
             );
           case MoveDirection.BOTTOM:
-            return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
             );
           case MoveDirection.RIGHT:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
+              )
             );
           default:
             break;
@@ -184,28 +186,30 @@ export class playerHandler extends entityHandler {
       case MoveDirection.BOTTOM:
         switch (currentDirection) {
           case MoveDirection.TOP:
-            return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
             );
           case MoveDirection.LEFT:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y + 1]
+              )
             );
           case MoveDirection.BOTTOM:
-            return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y + 2]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 2]
             );
           case MoveDirection.RIGHT:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
+              )
             );
           default:
             break;
@@ -214,27 +218,29 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y - 1]
+              )
             );
           case MoveDirection.LEFT:
-            return (
-              mapInfo[this.currentPoint.x - 2][this.currentPoint.y]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x - 2]?.[this.currentPoint.y]
             );
           case MoveDirection.BOTTOM:
             return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y + 1]
+              )
             );
           case MoveDirection.RIGHT:
-            return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
             );
           default:
             break;
@@ -243,27 +249,29 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
+              )
             );
           case MoveDirection.LEFT:
-            return (
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
             );
           case MoveDirection.BOTTOM:
             return (
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
+              )
             );
           case MoveDirection.RIGHT:
-            return (
-              mapInfo[this.currentPoint.x + 2][this.currentPoint.y]?.type ===
-              TileType.FLOOR
+            return !isWall(
+              mapInfo[this.currentPoint.x + 2]?.[this.currentPoint.y]
             );
           default:
             break;
@@ -272,10 +280,12 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y - 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y - 1
@@ -283,10 +293,12 @@ export class playerHandler extends entityHandler {
             );
           case MoveDirection.LEFT:
             return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR &&
-              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
-                TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y + 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y + 1
@@ -295,10 +307,12 @@ export class playerHandler extends entityHandler {
 
           case MoveDirection.BOTTOM:
             return (
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y + 1
@@ -306,10 +320,12 @@ export class playerHandler extends entityHandler {
             );
           case MoveDirection.RIGHT:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y - 1
@@ -324,10 +340,12 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y - 1
@@ -335,10 +353,12 @@ export class playerHandler extends entityHandler {
             );
           case MoveDirection.LEFT:
             return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR &&
-              mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
-                TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y - 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y - 1
@@ -347,10 +367,12 @@ export class playerHandler extends entityHandler {
 
           case MoveDirection.BOTTOM:
             return (
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y + 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y + 1
@@ -358,10 +380,12 @@ export class playerHandler extends entityHandler {
             );
           case MoveDirection.RIGHT:
             return (
-              mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
-                TileType.FLOOR &&
-              mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR &&
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
+              ) &&
+              !isWall(
+                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
+              ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y + 1
@@ -445,8 +469,6 @@ export class playerHandler extends entityHandler {
   }
 
   initMove(direction: MoveDirection) {
-    console.log("move", this.hasDead, this.checkCanMove(direction));
-
     if (this.hasDead) return;
     if (!this.checkCanMove(direction)) return;
     if (this.checkCanAttack(direction)) return;

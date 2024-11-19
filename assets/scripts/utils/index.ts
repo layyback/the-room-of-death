@@ -18,3 +18,7 @@ export const sortByName = (a: SpriteFrame, b: SpriteFrame) => {
   const numB = parseInt(b.name.match(/\((\d+)\)/)?.[1] || "0", 10);
   return numA - numB;
 };
+
+export const isWall = tileInfo => {
+  return tileInfo?.type?.includes("WALL");
+};

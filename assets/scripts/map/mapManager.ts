@@ -33,8 +33,6 @@ export class mapManager extends Component {
     messageCenter.subscribe(
       MessageType.nextLevel,
       () => {
-        console.log("clear and generate map");
-
         this.clearMap();
         this.generateMap();
       },
@@ -134,6 +132,7 @@ export class mapManager extends Component {
           x: rowIndex,
           y: colIndex
         },
+        direction: doorInfo.direction,
         position: tileNode.getWorldPosition()
       });
     }
