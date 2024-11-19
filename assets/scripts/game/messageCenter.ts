@@ -2,6 +2,7 @@ enum MessageType {
   Move,
   onMove,
   onAttacked,
+  onPlayerAttacked,
   InitPlayer,
   InitEnemy
 }

@@ -151,25 +151,33 @@ export class enemyHandler extends entityHandler {
     // 被攻击
   }
 
+  onAttack(attackDirection: AttackDirection): void {
+    super.onAttack(attackDirection);
+    messageCenter.publish(MessageType.onPlayerAttacked, {
+      emenyDirection: attackDirection
+    });
+  }
+
   onAttacked({ playerPoint, playerDirection, enemyPoint }) {
     const currentPoint = this.currentPoint;
     if (currentPoint.x === enemyPoint.x && currentPoint.y === enemyPoint.y) {
-      switch (playerDirection) {
-        case MoveDirection.TOP:
-          this.onDeath(DeathDirection.DEATHBOTTOM);
-          break;
-        case MoveDirection.BOTTOM:
-          this.onDeath(DeathDirection.DEATHTOP);
-          break;
-        case MoveDirection.LEFT:
-          this.onDeath(DeathDirection.DEATHRIGHT);
-          break;
-        case MoveDirection.RIGHT:
-          this.onDeath(DeathDirection.DEATHLEFT);
-          break;
-        default:
-          break;
-      }
+      this.onDeath(DeathDirection[`DEATH${this.currentDirection}`]);
+      // switch (playerDirection) {
+      //   case MoveDirection.TOP:
+      //     this.onDeath(DeathDirection.DEATHBOTTOM);
+      //     break;
+      //   case MoveDirection.BOTTOM:
+      //     this.onDeath(DeathDirection.DEATHTOP);
+      //     break;
+      //   case MoveDirection.LEFT:
+      //     this.onDeath(DeathDirection.DEATHRIGHT);
+      //     break;
+      //   case MoveDirection.RIGHT:
+      //     this.onDeath(DeathDirection.DEATHLEFT);
+      //     break;
+      //   default:
+      //     break;
+      // }
     }
   }
 }

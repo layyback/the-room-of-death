@@ -430,7 +430,7 @@ export const playerInfo = {
 
 export const enemyInfo = [
   {
-    x: 2,
+    x: 1,
     y: 6
   },
   {

@@ -23,6 +23,7 @@ import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "../game/messageCenter";
 import {
   AttackDirection,
+  DeathDirection,
   MoveDirection,
   PlayerState,
   TileSize,
@@ -103,12 +104,29 @@ export class playerHandler extends entityHandler {
     [PlayerState.ATTACKRIGHT]: {
       spritePath: "texture/player/attack/right",
       wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.DEATHTOP]: {
+      spritePath: "texture/player/death/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.DEATHBOTTOM]: {
+      spritePath: "texture/player/death/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.DEATHLEFT]: {
+      spritePath: "texture/player/death/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.DEATHRIGHT]: {
+      spritePath: "texture/player/death/right",
+      wrapMode: AnimationClip.WrapMode.Normal
     }
   };
 
   async start() {
     this.initPlayer();
     this.initControl();
+    this.initOnAttacked();
   }
 
   initPlayer() {
@@ -119,8 +137,16 @@ export class playerHandler extends entityHandler {
     messageCenter.subscribe(MessageType.Move, this.initMove, this);
   }
 
+  findEnemyOnPoint({ x, y }) {
+    const enemyList = enemyManager.enemyList;
+    return enemyList.find(
+      item => !item.hasDead && item.x === x && item.y === y
+    );
+  }
+
   checkCanMove(direction: MoveDirection) {
     const currentDirection = this.currentDirection;
+
     switch (direction) {
       case MoveDirection.TOP:
         switch (currentDirection) {
@@ -245,14 +271,22 @@ export class playerHandler extends entityHandler {
               mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
                 TileType.FLOOR &&
               mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR
+                ?.type === TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y - 1
+              })
             );
           case MoveDirection.LEFT:
             return (
               mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
                 ?.type === TileType.FLOOR &&
               mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
-                TileType.FLOOR
+                TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y + 1
+              })
             );
 
           case MoveDirection.BOTTOM:
@@ -260,14 +294,22 @@ export class playerHandler extends entityHandler {
               mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
                 TileType.FLOOR &&
               mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+                ?.type === TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y + 1
+              })
             );
           case MoveDirection.RIGHT:
             return (
               mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
                 TileType.FLOOR &&
               mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
-                ?.type === TileType.FLOOR
+                ?.type === TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y - 1
+              })
             );
 
           default:
@@ -281,14 +323,22 @@ export class playerHandler extends entityHandler {
               mapInfo[this.currentPoint.x + 1][this.currentPoint.y - 1]
                 ?.type === TileType.FLOOR &&
               mapInfo[this.currentPoint.x + 1][this.currentPoint.y]?.type ===
-                TileType.FLOOR
+                TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y - 1
+              })
             );
           case MoveDirection.LEFT:
             return (
               mapInfo[this.currentPoint.x - 1][this.currentPoint.y - 1]
                 ?.type === TileType.FLOOR &&
               mapInfo[this.currentPoint.x][this.currentPoint.y - 1]?.type ===
-                TileType.FLOOR
+                TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y - 1
+              })
             );
 
           case MoveDirection.BOTTOM:
@@ -296,14 +346,22 @@ export class playerHandler extends entityHandler {
               mapInfo[this.currentPoint.x - 1][this.currentPoint.y]?.type ===
                 TileType.FLOOR &&
               mapInfo[this.currentPoint.x - 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+                ?.type === TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y + 1
+              })
             );
           case MoveDirection.RIGHT:
             return (
               mapInfo[this.currentPoint.x][this.currentPoint.y + 1]?.type ===
                 TileType.FLOOR &&
               mapInfo[this.currentPoint.x + 1][this.currentPoint.y + 1]
-                ?.type === TileType.FLOOR
+                ?.type === TileType.FLOOR &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y + 1
+              })
             );
         }
         break;
@@ -348,10 +406,11 @@ export class playerHandler extends entityHandler {
       default:
         break;
     }
-    const enemyList = enemyManager.enemyList;
-    const enemy = enemyList.find(
-      item => !item.hasDead && item.x === fontPoint.x && item.y === fontPoint.y
-    );
+
+    const enemy = this.findEnemyOnPoint({
+      x: fontPoint.x,
+      y: fontPoint.y
+    });
 
     if (enemy) {
       this.onAttack(AttackDirection[`ATTACK${direction}`]);
@@ -367,7 +426,20 @@ export class playerHandler extends entityHandler {
     return false;
   }
 
+  initOnAttacked(): void {
+    messageCenter.subscribe(
+      MessageType.onPlayerAttacked,
+      () => {
+        console.log("death", this.currentDirection);
+
+        this.onDeath(DeathDirection[`DEATH${this.currentDirection}`]);
+      },
+      this
+    );
+  }
+
   initMove(direction: MoveDirection) {
+    if (this.hasDead) return;
     if (!this.checkCanMove(direction)) return;
     if (this.checkCanAttack(direction)) return;
     this.onMove(direction);
