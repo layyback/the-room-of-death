@@ -397,6 +397,10 @@ export class playerHandler extends entityHandler {
               ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
+                y: this.currentPoint.y
+              }) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x - 1,
                 y: this.currentPoint.y - 1
               })
             );
@@ -408,6 +412,10 @@ export class playerHandler extends entityHandler {
               !isWall(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
               ) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y + 1
+              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y + 1
@@ -424,6 +432,10 @@ export class playerHandler extends entityHandler {
               ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
+                y: this.currentPoint.y
+              }) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x + 1,
                 y: this.currentPoint.y + 1
               })
             );
@@ -435,6 +447,10 @@ export class playerHandler extends entityHandler {
               !isWall(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
               ) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y - 1
+              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y - 1
@@ -458,6 +474,10 @@ export class playerHandler extends entityHandler {
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y - 1
+              }) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y
               })
             );
           case MoveDirection.LEFT:
@@ -470,6 +490,10 @@ export class playerHandler extends entityHandler {
               ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
+                y: this.currentPoint.y - 1
+              }) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x,
                 y: this.currentPoint.y - 1
               })
             );
@@ -484,6 +508,10 @@ export class playerHandler extends entityHandler {
               ) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
+                y: this.currentPoint.y
+              }) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x - 1,
                 y: this.currentPoint.y + 1
               })
             );
@@ -495,6 +523,10 @@ export class playerHandler extends entityHandler {
               !isWall(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
               ) &&
+              !this.findEnemyOnPoint({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y + 1
+              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y + 1
@@ -580,12 +612,12 @@ export class playerHandler extends entityHandler {
   initMove(direction: MoveDirection) {
     if (this.hasDead) return;
     if (this.isMoving) return;
+    if (this.checkCanAttack(direction)) return;
     if (!this.checkCanMove(direction)) {
       this.isMoving = true;
       this.animationComponent.play(`BLOCK${direction}${this.currentDirection}`);
       return;
     }
-    if (this.checkCanAttack(direction)) return;
     this.onMove(direction);
   }
 
