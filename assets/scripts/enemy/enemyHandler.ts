@@ -28,7 +28,8 @@ import {
   TileSize,
   TileType,
   AttackDirection,
-  DeathDirection
+  DeathDirection,
+  EnemyType
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
 import { entityHandler } from "../common/entity";
@@ -41,65 +42,70 @@ interface IStateMap {
 
 @ccclass("enemyHandler")
 export class enemyHandler extends entityHandler {
-  stateMap: Record<EnemyState, IStateMap> = {
-    [EnemyState.TOP]: {
-      spritePath: "texture/woodenskeleton/idle/top",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [EnemyState.BOTTOM]: {
-      spritePath: "texture/woodenskeleton/idle/bottom",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [EnemyState.LEFT]: {
-      spritePath: "texture/woodenskeleton/idle/left",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [EnemyState.RIGHT]: {
-      spritePath: "texture/woodenskeleton/idle/right",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [EnemyState.ATTACKTOP]: {
-      spritePath: "texture/woodenskeleton/attack/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.ATTACKLEFT]: {
-      spritePath: "texture/woodenskeleton/attack/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.ATTACKBOTTOM]: {
-      spritePath: "texture/woodenskeleton/attack/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.ATTACKRIGHT]: {
-      spritePath: "texture/woodenskeleton/attack/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.DEATHTOP]: {
-      spritePath: "texture/woodenskeleton/death/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.DEATHBOTTOM]: {
-      spritePath: "texture/woodenskeleton/death/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.DEATHLEFT]: {
-      spritePath: "texture/woodenskeleton/death/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [EnemyState.DEATHRIGHT]: {
-      spritePath: "texture/woodenskeleton/death/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    }
-  };
+  type: EnemyType = EnemyType.WOODENSKELETON;
 
-  constructor({ point, position }) {
-    super();
-    this.init({ point, position });
+  get stateMap(): Record<EnemyState, IStateMap> {
+    const subDir = this.type.toLocaleLowerCase();
+    return {
+      [EnemyState.TOP]: {
+        spritePath: `texture/${subDir}/idle/top`,
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [EnemyState.BOTTOM]: {
+        spritePath: `texture/${subDir}/idle/bottom`,
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [EnemyState.LEFT]: {
+        spritePath: `texture/${subDir}/idle/left`,
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [EnemyState.RIGHT]: {
+        spritePath: `texture/${subDir}/idle/right`,
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [EnemyState.ATTACKTOP]: {
+        spritePath: "texture/woodenskeleton/attack/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.ATTACKLEFT]: {
+        spritePath: "texture/woodenskeleton/attack/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.ATTACKBOTTOM]: {
+        spritePath: "texture/woodenskeleton/attack/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.ATTACKRIGHT]: {
+        spritePath: "texture/woodenskeleton/attack/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.DEATHTOP]: {
+        spritePath: `texture/${subDir}/death/top`,
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.DEATHBOTTOM]: {
+        spritePath: `texture/${subDir}/death/bottom`,
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.DEATHLEFT]: {
+        spritePath: `texture/${subDir}/death/left`,
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [EnemyState.DEATHRIGHT]: {
+        spritePath: `texture/${subDir}/death/right`,
+        wrapMode: AnimationClip.WrapMode.Normal
+      }
+    };
   }
 
-  async init({ point, position }) {
-    super.init({ point, position });
+  constructor(enemyInfo) {
+    super();
+    this.init(enemyInfo);
+  }
 
+  async init({ point, position, type }) {
+    this.type = type;
+    super.init({ point, position });
     this.initAttack({
       playerPoint: Game.levelInfo.playerInfo,
       playerDirection: MoveDirection.TOP
@@ -110,7 +116,6 @@ export class enemyHandler extends entityHandler {
 
   initAttack({ playerPoint, playerDirection }) {
     if (this.hasDead) return;
-
     const x = playerPoint.x - this.currentPoint.x;
     const y = playerPoint.y - this.currentPoint.y;
     switch (true) {
@@ -129,6 +134,7 @@ export class enemyHandler extends entityHandler {
         break;
     }
 
+    if (this.type === EnemyType.IRONSKELETON) return;
     // 攻击
     switch (true) {
       case x === 0 && y === 1:
@@ -147,10 +153,9 @@ export class enemyHandler extends entityHandler {
       default:
         break;
     }
-
-    // 被攻击
   }
 
+  // 被攻击
   onAttack(attackDirection: AttackDirection): void {
     super.onAttack(attackDirection);
     messageCenter.publish(MessageType.onPlayerAttacked, {

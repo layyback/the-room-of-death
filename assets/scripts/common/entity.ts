@@ -112,19 +112,15 @@ export abstract class entityHandler extends Component {
         switch (this.currentDirection) {
           case MoveDirection.TOP:
             this.currentDirection = MoveDirection.LEFT;
-
             break;
           case MoveDirection.LEFT:
             this.currentDirection = MoveDirection.BOTTOM;
-
             break;
           case MoveDirection.BOTTOM:
             this.currentDirection = MoveDirection.RIGHT;
-
             break;
           case MoveDirection.RIGHT:
             this.currentDirection = MoveDirection.TOP;
-
           default:
             break;
         }
@@ -152,7 +148,6 @@ export abstract class entityHandler extends Component {
         }
         this.animationComponent.play(`${direction}${this.currentDirection}`);
         break;
-
       default:
         break;
     }

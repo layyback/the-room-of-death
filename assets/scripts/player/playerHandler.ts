@@ -19,7 +19,7 @@ import {
   Size
 } from "cc";
 const { ccclass, property } = _decorator;
-import { loadReources, isWall } from "../utils";
+import { loadReources, isWall, isBlock, isCliff } from "../utils";
 import { MessageType, messageCenter } from "../game/messageCenter";
 import {
   AttackDirection,
@@ -89,6 +89,102 @@ export class playerHandler extends entityHandler {
       spritePath: "texture/player/turnright/left",
       wrapMode: AnimationClip.WrapMode.Normal
     },
+    [PlayerState.BLOCKTOPTOP]: {
+      spritePath: "texture/player/blockfront/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTOPLEFT]: {
+      spritePath: "texture/player/blockright/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTOPRIGHT]: {
+      spritePath: "texture/player/blockleft/right",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTOPBOTTOM]: {
+      spritePath: "texture/player/blockback/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKBOTTOMTOP]: {
+      spritePath: "texture/player/blockback/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKBOTTOMLEFT]: {
+      spritePath: "texture/player/blockleft/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKBOTTOMRIGHT]: {
+      spritePath: "texture/player/blockright/right",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKBOTTOMBOTTOM]: {
+      spritePath: "texture/player/blockfront/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKLEFTTOP]: {
+      spritePath: "texture/player/blockleft/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKLEFTLEFT]: {
+      spritePath: "texture/player/blockfront/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKLEFTRIGHT]: {
+      spritePath: "texture/player/blockback/right",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKLEFTBOTTOM]: {
+      spritePath: "texture/player/blockright/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKRIGHTTOP]: {
+      spritePath: "texture/player/blockright/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKRIGHTLEFT]: {
+      spritePath: "texture/player/blockback/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKRIGHTRIGHT]: {
+      spritePath: "texture/player/blockfront/right",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKRIGHTBOTTOM]: {
+      spritePath: "texture/player/blockleft/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNLEFTTOP]: {
+      spritePath: "texture/player/blockturnleft/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNLEFTLEFT]: {
+      spritePath: "texture/player/blockturnleft/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNLEFTRIGHT]: {
+      spritePath: "texture/player/blockturnleft/right",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNLEFTBOTTOM]: {
+      spritePath: "texture/player/blockturnleft/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNRIGHTTOP]: {
+      spritePath: "texture/player/blockturnright/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNRIGHTLEFT]: {
+      spritePath: "texture/player/blockturnright/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNRIGHTRIGHT]: {
+      spritePath: "texture/player/blockturnright/right",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.BLOCKTURNRIGHTBOTTOM]: {
+      spritePath: "texture/player/blockturnright/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
     [PlayerState.ATTACKTOP]: {
       spritePath: "texture/player/attack/top",
       wrapMode: AnimationClip.WrapMode.Normal
@@ -147,20 +243,24 @@ export class playerHandler extends entityHandler {
   }
 
   checkCanMove(direction: MoveDirection) {
-    if (this.isMoving) return;
     const currentDirection = this.currentDirection;
     const mapInfo = Game.levelInfo.mapInfo;
+
+    // let canMove;
 
     switch (direction) {
       case MoveDirection.TOP:
         switch (currentDirection) {
           case MoveDirection.TOP:
-            return !isWall(
-              mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 2]
+            return (
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 2]
+              ) &&
+              !isBlock(mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1])
             );
           case MoveDirection.LEFT:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
               ) &&
               !isWall(
@@ -168,12 +268,12 @@ export class playerHandler extends entityHandler {
               )
             );
           case MoveDirection.BOTTOM:
-            return !isWall(
+            return !isBlock(
               mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
             );
           case MoveDirection.RIGHT:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
               ) &&
               !isWall(
@@ -186,12 +286,12 @@ export class playerHandler extends entityHandler {
       case MoveDirection.BOTTOM:
         switch (currentDirection) {
           case MoveDirection.TOP:
-            return !isWall(
+            return !isBlock(
               mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
             );
           case MoveDirection.LEFT:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
               ) &&
               !isWall(
@@ -199,12 +299,15 @@ export class playerHandler extends entityHandler {
               )
             );
           case MoveDirection.BOTTOM:
-            return !isWall(
-              mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 2]
+            return (
+              !isWall(
+                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 2]
+              ) &&
+              !isBlock(mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1])
             );
           case MoveDirection.RIGHT:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
               ) &&
               !isWall(
@@ -218,7 +321,7 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
               ) &&
               !isWall(
@@ -226,12 +329,15 @@ export class playerHandler extends entityHandler {
               )
             );
           case MoveDirection.LEFT:
-            return !isWall(
-              mapInfo[this.currentPoint.x - 2]?.[this.currentPoint.y]
+            return (
+              !isWall(
+                mapInfo[this.currentPoint.x - 2]?.[this.currentPoint.y]
+              ) &&
+              !isBlock(mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y])
             );
           case MoveDirection.BOTTOM:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
               ) &&
               !isWall(
@@ -239,7 +345,7 @@ export class playerHandler extends entityHandler {
               )
             );
           case MoveDirection.RIGHT:
-            return !isWall(
+            return !isBlock(
               mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
             );
           default:
@@ -249,7 +355,7 @@ export class playerHandler extends entityHandler {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
               ) &&
               !isWall(
@@ -257,12 +363,12 @@ export class playerHandler extends entityHandler {
               )
             );
           case MoveDirection.LEFT:
-            return !isWall(
+            return !isBlock(
               mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
             );
           case MoveDirection.BOTTOM:
             return (
-              !isWall(
+              !isBlock(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
               ) &&
               !isWall(
@@ -270,8 +376,11 @@ export class playerHandler extends entityHandler {
               )
             );
           case MoveDirection.RIGHT:
-            return !isWall(
-              mapInfo[this.currentPoint.x + 2]?.[this.currentPoint.y]
+            return (
+              !isWall(
+                mapInfo[this.currentPoint.x + 2]?.[this.currentPoint.y]
+              ) &&
+              !isBlock(mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y])
             );
           default:
             break;
@@ -470,7 +579,12 @@ export class playerHandler extends entityHandler {
 
   initMove(direction: MoveDirection) {
     if (this.hasDead) return;
-    if (!this.checkCanMove(direction)) return;
+    if (this.isMoving) return;
+    if (!this.checkCanMove(direction)) {
+      this.isMoving = true;
+      this.animationComponent.play(`BLOCK${direction}${this.currentDirection}`);
+      return;
+    }
     if (this.checkCanAttack(direction)) return;
     this.onMove(direction);
   }

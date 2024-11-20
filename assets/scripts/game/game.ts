@@ -17,6 +17,7 @@ import level from "../level/level";
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "./messageCenter";
 import { MoveDirection } from "../utils/enum";
+import { Keyboard } from "./keyboard";
 import { mapManager } from "../map/mapManager";
 import { playerHandler } from "../player/playerHandler";
 import { enemyManager } from "../enemy/enemyManager";
@@ -39,6 +40,7 @@ export class Game extends Component {
     this.addComponent(playerHandler);
     this.addComponent(enemyManager);
     this.addComponent(doorHandler);
+    this.addComponent(Keyboard);
   }
   update(deltaTime: number) {}
 }

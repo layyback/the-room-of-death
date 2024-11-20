@@ -50,9 +50,9 @@ export class enemyManager extends Component {
   initEnemy() {
     messageCenter.subscribe(
       MessageType.InitEnemy,
-      ({ point, position }) => {
+      enemyInfo => {
         enemyManager.enemyList = Game.levelInfo.enemyInfo;
-        new enemyHandler({ point, position });
+        new enemyHandler(enemyInfo);
       },
       this
     );

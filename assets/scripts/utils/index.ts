@@ -22,3 +22,11 @@ export const sortByName = (a: SpriteFrame, b: SpriteFrame) => {
 export const isWall = tileInfo => {
   return tileInfo?.type?.includes("WALL");
 };
+
+export const isCliff = tileInfo => {
+  return tileInfo?.type?.includes("CLIFF");
+};
+
+export const isBlock = tileInfo => {
+  return !tileInfo?.type || isWall(tileInfo) || isCliff(tileInfo);
+};

@@ -119,6 +119,7 @@ export class mapManager extends Component {
             x: rowIndex,
             y: colIndex
           },
+          type: enemy.type,
           position: tileNode.getWorldPosition()
         });
       }

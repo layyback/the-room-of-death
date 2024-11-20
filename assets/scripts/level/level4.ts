@@ -1,4 +1,4 @@
-import { DoorState, PlayerState, TileType } from "../utils/enum";
+import { DoorState, EnemyType, PlayerState, TileType } from "../utils/enum";
 
 export const mapInfo = [
   [
@@ -202,7 +202,8 @@ export const playerInfo = {
 export const enemyInfo = [
   {
     x: 1,
-    y: 3
+    y: 3,
+    type: EnemyType.IRONSKELETON
   }
 ];
 
