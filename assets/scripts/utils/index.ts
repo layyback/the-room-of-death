@@ -33,7 +33,3 @@ export const isBlock = tileInfo => {
 };
 
 export const isCloseDoor = tileInfo => {};
-
-// export const checkEnemyAllDead = () => {
-//   return enemyManager.enemyList.every(enemy => enemy.hasDead);
-// };
