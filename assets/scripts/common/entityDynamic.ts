@@ -61,7 +61,10 @@ export abstract class entityDynamic extends Component {
   async init({ point, position, direction = MoveDirection.TOP }) {
     const player = new Node();
     player.parent = find("Canvas/background");
-    player.addComponent(UITransform).contentSize = new Size(240, 240);
+    player.addComponent(UITransform).contentSize = new Size(
+      4 * TileSize,
+      4 * TileSize
+    );
     const sprite = player.addComponent(Sprite);
     sprite.sizeMode = Sprite.SizeMode.CUSTOM;
     this.animationComponent = player.addComponent(Animation);
@@ -158,7 +161,7 @@ export abstract class entityDynamic extends Component {
       case MoveDirection.TOP:
         this.currentPoint.y -= 1;
         tween(this.entity)
-          .by(0.3, { position: new Vec3(0, 1 * this.moveStep, 0) })
+          .by(0.2, { position: new Vec3(0, 1 * this.moveStep, 0) })
           .call(() => {
             this.isMoving = false;
           })
@@ -167,7 +170,7 @@ export abstract class entityDynamic extends Component {
       case MoveDirection.BOTTOM:
         this.currentPoint.y += 1;
         tween(this.entity)
-          .by(0.3, { position: new Vec3(0, -1 * this.moveStep, 0) })
+          .by(0.2, { position: new Vec3(0, -1 * this.moveStep, 0) })
           .call(() => {
             this.isMoving = false;
           })
@@ -176,7 +179,7 @@ export abstract class entityDynamic extends Component {
       case MoveDirection.LEFT:
         this.currentPoint.x -= 1;
         tween(this.entity)
-          .by(0.3, { position: new Vec3(-1 * this.moveStep, 0, 0) })
+          .by(0.2, { position: new Vec3(-1 * this.moveStep, 0, 0) })
           .call(() => {
             this.isMoving = false;
           })
@@ -185,7 +188,7 @@ export abstract class entityDynamic extends Component {
       case MoveDirection.RIGHT:
         this.currentPoint.x += 1;
         tween(this.entity)
-          .by(0.3, { position: new Vec3(1 * this.moveStep, 0, 0) })
+          .by(0.2, { position: new Vec3(1 * this.moveStep, 0, 0) })
           .call(() => {
             this.isMoving = false;
           })

@@ -34,6 +34,7 @@ import {
 import { StateManager } from "../common/stateManager";
 import { entityDynamic } from "../common/entityDynamic";
 import { Game } from "../game/game";
+import { enemyManager } from "./enemyManager";
 
 interface IStateMap {
   spritePath: string;
@@ -167,6 +168,9 @@ export class enemyHandler extends entityDynamic {
     const currentPoint = this.currentPoint;
     if (currentPoint.x === enemyPoint.x && currentPoint.y === enemyPoint.y) {
       this.onDeath(DeathDirection[`DEATH${this.currentDirection}`]);
+      this.scheduleOnce(() => {
+        this.checkAllDead();
+      }, 1);
       // switch (playerDirection) {
       //   case MoveDirection.TOP:
       //     this.onDeath(DeathDirection.DEATHBOTTOM);
@@ -183,6 +187,13 @@ export class enemyHandler extends entityDynamic {
       //   default:
       //     break;
       // }
+    }
+  }
+  checkAllDead() {
+    const allDead = enemyManager.enemyList.every(enemy => enemy.hasDead);
+
+    if (allDead) {
+      messageCenter.publish(MessageType.onAllEnemyDead, {});
     }
   }
 }

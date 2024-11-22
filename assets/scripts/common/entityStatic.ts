@@ -55,15 +55,13 @@ export abstract class entityStatic extends Component {
 
   set state(state) {
     this.currentState = state;
-    console.log("smoke direction", this.currentState);
-
     this.animationComponent.play(this.currentState);
   }
 
-  async init({ point, position, direction }) {
+  async init({ point, position, state, size = 4.5 * TileSize }) {
     const player = new Node();
     player.parent = find("Canvas/background");
-    player.addComponent(UITransform).contentSize = new Size(240, 240);
+    player.addComponent(UITransform).contentSize = new Size(size, size);
     const sprite = player.addComponent(Sprite);
     sprite.sizeMode = Sprite.SizeMode.CUSTOM;
     this.animationComponent = player.addComponent(Animation);
@@ -72,7 +70,7 @@ export abstract class entityStatic extends Component {
     player.setWorldPosition(new Vec3(position.x, position.y, 0));
     this.currentPoint = point;
     await this.initAnimations();
-    this.state = direction;
+    this.state = state;
   }
 
   async initAnimations() {

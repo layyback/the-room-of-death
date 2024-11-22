@@ -65,16 +65,23 @@ export class smokeHandler extends entityStatic {
 
   protected start(): void {
     messageCenter.subscribe(MessageType.onMove, this.createSmoke, this);
+    messageCenter.subscribe(
+      MessageType.nextLevel,
+      () => {
+        this.entity = null;
+      },
+      this
+    );
   }
 
-  createSmoke({ playerPoint, playerPosition, moveDirection }) {
+  async createSmoke({ playerPoint, playerPosition, moveDirection }) {
     let { x, y } = playerPosition;
     switch (moveDirection) {
       case MoveDirection.TOP:
-        y -= (TileSize * 2) / 3;
+        y -= (TileSize * 1) / 3;
         break;
       case MoveDirection.BOTTOM:
-        y += (TileSize * 2) / 3;
+        y += (TileSize * 1) / 3;
         break;
       case MoveDirection.LEFT:
         x += TileSize;
@@ -86,11 +93,12 @@ export class smokeHandler extends entityStatic {
         break;
     }
     if (!this.entity) {
-      this.init({
+      await this.init({
         point: playerPoint,
         position: { x, y },
-        direction: moveDirection
+        state: moveDirection
       });
+      this.entity.setSiblingIndex(this.entity.parent.children.length - 2);
     } else {
       this.entity.setWorldPosition(new Vec3(x, y, 0));
       this.state = moveDirection;

@@ -1,4 +1,4 @@
-export const TileSize = 55;
+export const TileSize = 65;
 
 export enum MoveDirection {
   TOP = "TOP",
@@ -20,7 +20,12 @@ export enum DeathDirection {
   DEATHTOP = "DEATHTOP",
   DEATHBOTTOM = "DEATHBOTTOM",
   DEATHLEFT = "DEATHLEFT",
-  DEATHRIGHT = "DEATHRIGHT"
+  DEATHRIGHT = "DEATHRIGHT",
+
+  AIRDEATHTOP = "AIRDEATHTOP",
+  AIRDEATHBOTTOM = "AIRDEATHBOTTOM",
+  AIRDEATHLEFT = "AIRDEATHLEFT",
+  AIRDEATHRIGHT = "AIRDEATHRIGHT"
 }
 
 export enum PlayerState {
@@ -71,7 +76,12 @@ export enum PlayerState {
   DEATHTOP = "DEATHTOP",
   DEATHBOTTOM = "DEATHBOTTOM",
   DEATHLEFT = "DEATHLEFT",
-  DEATHRIGHT = "DEATHRIGHT"
+  DEATHRIGHT = "DEATHRIGHT",
+
+  AIRDEATHTOP = "AIRDEATHTOP",
+  AIRDEATHBOTTOM = "AIRDEATHBOTTOM",
+  AIRDEATHLEFT = "AIRDEATHLEFT",
+  AIRDEATHRIGHT = "AIRDEATHRIGHT"
 }
 
 export enum EnemyState {
@@ -127,4 +137,33 @@ export enum KeyCode {
 export enum EnemyType {
   WOODENSKELETON = "WOODENSKELETON",
   IRONSKELETON = "IRONSKELETON"
+}
+
+export enum SpikeType {
+  ZERO = "ZERO",
+  ONE = "ONE",
+  TWO = "TWO",
+  THREE = "THREE",
+  FOUR = "FOUR",
+  FIVE = "FIVE"
+}
+
+export enum SpikeStep {
+  ZERO = 0,
+  ONE,
+  TWO,
+  THREE,
+  FOUR,
+  FIVE
+}
+
+export enum BurstState {
+  IDLE = "IDLE",
+  ATTACK = "ATTACK",
+  DEATH = "DEATH"
+}
+
+export enum PlayerDeathType {
+  NORMAL = "",
+  AIRDEATH = "AIR"
 }

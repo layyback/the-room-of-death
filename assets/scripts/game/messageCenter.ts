@@ -6,6 +6,9 @@ enum MessageType {
   InitPlayer,
   InitEnemy,
   InitDoor,
+  InitSpike,
+  InitBurst,
+  onAllEnemyDead,
   nextLevel
 }
 

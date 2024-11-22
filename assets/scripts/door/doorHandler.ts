@@ -45,6 +45,7 @@ interface IStateMap {
 export class doorHandler extends entityStatic {
   entity: Node;
   currentState: DoorState = DoorState.CLOSETOP;
+  static isOpen: boolean = false;
 
   stateMap: Record<string, IStateMap> = {
     [DoorState.CLOSETOP]: {
@@ -56,7 +57,7 @@ export class doorHandler extends entityStatic {
       wrapMode: AnimationClip.WrapMode.Normal
     },
     [DoorState.OPEN]: {
-      spritePath: "texture/door/idle/death",
+      spritePath: "texture/door/death",
       wrapMode: AnimationClip.WrapMode.Normal
     }
   };
@@ -64,6 +65,7 @@ export class doorHandler extends entityStatic {
   protected start(): void {
     messageCenter.subscribe(MessageType.InitDoor, this.init, this);
     messageCenter.subscribe(MessageType.onMove, this.onMove, this);
+    messageCenter.subscribe(MessageType.onAllEnemyDead, this.openDoor, this);
   }
 
   onMove({ playerPoint }) {
@@ -71,8 +73,14 @@ export class doorHandler extends entityStatic {
       playerPoint.x === this.currentPoint.x &&
       playerPoint.y === this.currentPoint.y
     ) {
-      this.state = DoorState.OPEN;
-      Game.nextLevel();
+      this.scheduleOnce(() => {
+        Game.nextLevel();
+      }, 0.5);
     }
+  }
+
+  openDoor() {
+    this.state = DoorState.OPEN;
+    doorHandler.isOpen = true;
   }
 }

@@ -1,4 +1,5 @@
 import { Sprite, SpriteFrame, resources } from "cc";
+// import { enemyManager } from "../enemy/enemyManager";
 
 export const loadReources = (path: string): Promise<SpriteFrame[]> => {
   return new Promise((resolve, reject) => {
@@ -30,3 +31,9 @@ export const isCliff = tileInfo => {
 export const isBlock = tileInfo => {
   return !tileInfo?.type || isWall(tileInfo) || isCliff(tileInfo);
 };
+
+export const isCloseDoor = tileInfo => {};
+
+// export const checkEnemyAllDead = () => {
+//   return enemyManager.enemyList.every(enemy => enemy.hasDead);
+// };

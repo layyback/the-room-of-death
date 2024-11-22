@@ -25,6 +25,7 @@ import {
   AttackDirection,
   DeathDirection,
   MoveDirection,
+  PlayerDeathType,
   PlayerState,
   TileSize,
   TileType
@@ -216,6 +217,22 @@ export class playerHandler extends entityDynamic {
     [PlayerState.DEATHRIGHT]: {
       spritePath: "texture/player/death/right",
       wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.AIRDEATHTOP]: {
+      spritePath: "texture/player/airdeath/top",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.AIRDEATHBOTTOM]: {
+      spritePath: "texture/player/airdeath/bottom",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.AIRDEATHLEFT]: {
+      spritePath: "texture/player/airdeath/left",
+      wrapMode: AnimationClip.WrapMode.Normal
+    },
+    [PlayerState.AIRDEATHRIGHT]: {
+      spritePath: "texture/player/airdeath/right",
+      wrapMode: AnimationClip.WrapMode.Normal
     }
   };
 
@@ -227,6 +244,11 @@ export class playerHandler extends entityDynamic {
 
   initPlayer() {
     messageCenter.subscribe(MessageType.InitPlayer, this.init, this);
+  }
+
+  async init({ point, position, direction }) {
+    await super.init({ point, position, direction });
+    this.entity.setSiblingIndex(this.entity.parent.children.length - 1);
   }
 
   initControl() {
@@ -581,8 +603,6 @@ export class playerHandler extends entityDynamic {
       y: fontPoint.y
     });
 
-    console.log("check attack", enemy, fontPoint);
-
     if (enemy) {
       this.onAttack(AttackDirection[`ATTACK${direction}`]);
       messageCenter.publish(MessageType.onAttacked, {
@@ -600,10 +620,8 @@ export class playerHandler extends entityDynamic {
   initOnAttacked(): void {
     messageCenter.subscribe(
       MessageType.onPlayerAttacked,
-      () => {
-        console.log("death", this.currentDirection);
-
-        this.onDeath(DeathDirection[`DEATH${this.currentDirection}`]);
+      ({ type = PlayerDeathType.NORMAL }) => {
+        this.onDeath(DeathDirection[`${type}DEATH${this.currentDirection}`]);
       },
       this
     );
