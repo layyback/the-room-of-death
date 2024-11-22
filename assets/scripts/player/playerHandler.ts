@@ -30,7 +30,7 @@ import {
   TileType
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { entityHandler } from "../common/entity";
+import { entityDynamic } from "../common/entityDynamic";
 import { enemyManager } from "../enemy/enemyManager";
 import { Game } from "../game/game";
 
@@ -39,7 +39,7 @@ interface IStateMap {
   wrapMode: AnimationClip.WrapMode;
 }
 
-export class playerHandler extends entityHandler {
+export class playerHandler extends entityDynamic {
   stateMap: Record<PlayerState, IStateMap> = {
     [PlayerState.TOP]: {
       spritePath: "texture/player/idle/top",
@@ -625,7 +625,9 @@ export class playerHandler extends entityHandler {
     super.onMove(direction);
     messageCenter.publish(MessageType.onMove, {
       playerPoint: this.currentPoint,
-      playerDirection: this.currentDirection
+      playerPosition: this.entity.getWorldPosition(),
+      playerDirection: this.currentDirection,
+      moveDirection: direction
     });
   }
 

@@ -29,7 +29,7 @@ import {
   TileType
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { entityHandler } from "../common/entity";
+import { entityDynamic } from "../common/entityDynamic";
 import { enemyHandler } from "./enemyHandler";
 import { Game } from "../game/game";
 

@@ -108,6 +108,13 @@ export enum DoorState {
   CLOSETOP = "CLOSETOP"
 }
 
+export enum SmokeDirection {
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT"
+}
+
 export enum KeyCode {
   UP = 87,
   DOWN = 83,

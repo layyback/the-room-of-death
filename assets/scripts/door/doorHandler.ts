@@ -34,6 +34,7 @@ import {
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
 import { Game } from "../game/game";
+import { entityStatic } from "../common/entityStatic";
 
 interface IStateMap {
   spritePath: string;
@@ -41,11 +42,9 @@ interface IStateMap {
 }
 
 @ccclass("doorHandler")
-export class doorHandler extends Component {
+export class doorHandler extends entityStatic {
   entity: Node;
   currentState: DoorState = DoorState.CLOSETOP;
-  currentPoint: Record<"x" | "y", number>;
-  animationComponent: AnimationComponent;
 
   stateMap: Record<string, IStateMap> = {
     [DoorState.CLOSETOP]: {
@@ -62,44 +61,9 @@ export class doorHandler extends Component {
     }
   };
 
-  get state() {
-    return this.currentState;
-  }
-
-  set state(state: DoorState) {
-    this.currentState = state;
-    this.animationComponent.play(this.currentState);
-  }
-
   protected start(): void {
     messageCenter.subscribe(MessageType.InitDoor, this.init, this);
     messageCenter.subscribe(MessageType.onMove, this.onMove, this);
-  }
-
-  async init({ point, position, direction }) {
-    const player = new Node("door");
-    player.parent = find("Canvas/background");
-    player.addComponent(UITransform).contentSize = new Size(240, 240);
-    const sprite = player.addComponent(Sprite);
-    sprite.sizeMode = Sprite.SizeMode.CUSTOM;
-    this.animationComponent = player.addComponent(Animation);
-    this.entity = player;
-    const x = position.x;
-    const y = position.y;
-    player.setWorldPosition(new Vec3(x, y, 0));
-    this.currentPoint = point;
-    await this.initAnimations();
-    this.state = direction;
-  }
-
-  async initAnimations() {
-    const stateMap = this.stateMap;
-    return Promise.all(
-      Object.keys(stateMap).map(async state => {
-        const idleState = await new StateManager(stateMap[state]).initState();
-        this.animationComponent.addClip(idleState, state);
-      })
-    );
   }
 
   onMove({ playerPoint }) {

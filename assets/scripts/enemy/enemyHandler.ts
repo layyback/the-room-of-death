@@ -32,7 +32,7 @@ import {
   EnemyType
 } from "../utils/enum";
 import { StateManager } from "../common/stateManager";
-import { entityHandler } from "../common/entity";
+import { entityDynamic } from "../common/entityDynamic";
 import { Game } from "../game/game";
 
 interface IStateMap {
@@ -41,7 +41,7 @@ interface IStateMap {
 }
 
 @ccclass("enemyHandler")
-export class enemyHandler extends entityHandler {
+export class enemyHandler extends entityDynamic {
   type: EnemyType = EnemyType.WOODENSKELETON;
 
   get stateMap(): Record<EnemyState, IStateMap> {

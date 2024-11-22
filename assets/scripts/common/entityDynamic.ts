@@ -38,8 +38,8 @@ interface IStateMap {
   wrapMode: AnimationClip.WrapMode;
 }
 
-@ccclass("entityHandler")
-export abstract class entityHandler extends Component {
+@ccclass("entityDynamic")
+export abstract class entityDynamic extends Component {
   entity: Node;
   moveStep: number = TileSize;
   isMoving: boolean = false;
@@ -66,9 +66,7 @@ export abstract class entityHandler extends Component {
     sprite.sizeMode = Sprite.SizeMode.CUSTOM;
     this.animationComponent = player.addComponent(Animation);
     this.entity = player;
-    const x = position.x;
-    const y = position.y;
-    player.setWorldPosition(new Vec3(x, y, 0));
+    player.setWorldPosition(new Vec3(position.x, position.y, 0));
     this.currentPoint = point;
     this.isMoving = false;
     this.hasDead = false;

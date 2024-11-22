@@ -22,6 +22,7 @@ import { mapManager } from "../map/mapManager";
 import { playerHandler } from "../player/playerHandler";
 import { enemyManager } from "../enemy/enemyManager";
 import { doorHandler } from "../door/doorHandler";
+import { smokeHandler } from "../smoke/smokeHandler";
 
 @ccclass("Game")
 export class Game extends Component {
@@ -41,6 +42,7 @@ export class Game extends Component {
     this.addComponent(enemyManager);
     this.addComponent(doorHandler);
     this.addComponent(Keyboard);
+    this.addComponent(smokeHandler);
   }
   update(deltaTime: number) {}
 }
