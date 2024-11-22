@@ -75,7 +75,6 @@ export class burstHandler extends entityStatic {
 
   async init({ point, position, type, state }) {
     super.init({ point, position, state: BurstState.IDLE, size: TileSize });
-
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);
   }
 

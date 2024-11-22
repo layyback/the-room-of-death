@@ -35,16 +35,24 @@ import { Game } from "../game/game";
 
 @ccclass("burstManager")
 export class burstManager extends Component {
+  static burstList: burstHandler[] = [];
   start() {
-    console.log("init burstManager");
     this.initBurst();
   }
 
   initBurst() {
     messageCenter.subscribe(
+      MessageType.nextLevel,
+      () => {
+        burstManager.burstList = [];
+      },
+      this
+    );
+
+    messageCenter.subscribe(
       MessageType.InitBurst,
       burstInfo => {
-        new burstHandler(burstInfo);
+        burstManager.burstList.push(new burstHandler(burstInfo));
       },
       this
     );

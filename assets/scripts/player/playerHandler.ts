@@ -35,6 +35,7 @@ import { entityDynamic } from "../common/entityDynamic";
 import { enemyManager } from "../enemy/enemyManager";
 import { doorHandler } from "../door/doorHandler";
 import { Game } from "../game/game";
+import { burstManager } from "../burst/burstManager";
 
 interface IStateMap {
   spritePath: string;
@@ -261,7 +262,8 @@ export class playerHandler extends entityDynamic {
   findEnemyOnPoint({ x, y }) {
     const enemyList = enemyManager.enemyList;
     return enemyList.find(
-      item => !item.hasDead && item.x === x && item.y === y
+      item =>
+        !item.hasDead && item.currentPoint.x === x && item.currentPoint.y === y
     );
   }
 
@@ -271,11 +273,28 @@ export class playerHandler extends entityDynamic {
     return !isOpen && dX === x && dY === y;
   }
 
+  findBrustOnPoint({ x, y }) {
+    const burstList = burstManager.burstList;
+    return burstList.find(
+      item =>
+        !item.hasDestroy &&
+        item.currentPoint.x === x &&
+        item.currentPoint.y === y
+    );
+  }
+
   checkCanMove(direction: MoveDirection) {
     const currentDirection = this.currentDirection;
     const mapInfo = Game.levelInfo.mapInfo;
 
-    // let canMove;
+    const isPassable = ({ x, y }) => {
+      const tileInfo = mapInfo[x]?.[y];
+      return (
+        (!isBlock(tileInfo) || this.findBrustOnPoint({ x, y })) &&
+        !this.findDoorOnPoint({ x, y }) &&
+        !this.findEnemyOnPoint({ x, y })
+      );
+    };
 
     switch (direction) {
       case MoveDirection.TOP:
@@ -285,9 +304,10 @@ export class playerHandler extends entityDynamic {
               !isWall(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 2]
               ) &&
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y - 1
+              }) &&
               !this.findDoorOnPoint({
                 x: this.currentPoint.x,
                 y: this.currentPoint.y - 2
@@ -295,55 +315,32 @@ export class playerHandler extends entityDynamic {
             );
           case MoveDirection.LEFT:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y - 1
+              }) &&
               !isWall(
                 mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y - 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y - 1
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y - 1
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y - 1
               })
             );
           case MoveDirection.BOTTOM:
+            return isPassable({
+              x: this.currentPoint.x,
+              y: this.currentPoint.y - 1
+            });
+          case MoveDirection.RIGHT:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
-              ) &&
-              !this.findDoorOnPoint({
+              isPassable({
                 x: this.currentPoint.x,
                 y: this.currentPoint.y - 1
               }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y - 1
-              })
-            );
-          case MoveDirection.RIGHT:
-            return (
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y - 1]
-              ) &&
               !isWall(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y - 1
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y - 1
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y - 1
@@ -355,35 +352,19 @@ export class playerHandler extends entityDynamic {
       case MoveDirection.BOTTOM:
         switch (currentDirection) {
           case MoveDirection.TOP:
+            return isPassable({
+              x: this.currentPoint.x,
+              y: this.currentPoint.y + 1
+            });
+          case MoveDirection.LEFT:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
-              ) &&
-              !this.findDoorOnPoint({
+              isPassable({
                 x: this.currentPoint.x,
                 y: this.currentPoint.y + 1
               }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y + 1
-              })
-            );
-          case MoveDirection.LEFT:
-            return (
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
-              ) &&
               !isWall(
                 mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y + 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y + 1
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y + 1
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y + 1
@@ -394,9 +375,10 @@ export class playerHandler extends entityDynamic {
               !isWall(
                 mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 2]
               ) &&
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y + 1
+              }) &&
               !this.findDoorOnPoint({
                 x: this.currentPoint.x,
                 y: this.currentPoint.y + 2
@@ -404,20 +386,13 @@ export class playerHandler extends entityDynamic {
             );
           case MoveDirection.RIGHT:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x]?.[this.currentPoint.y + 1]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x,
+                y: this.currentPoint.y + 1
+              }) &&
               !isWall(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y + 1
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x,
-                y: this.currentPoint.y + 1
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y + 1
@@ -430,20 +405,13 @@ export class playerHandler extends entityDynamic {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y
+              }) &&
               !isWall(
                 mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y - 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x - 1,
-                y: this.currentPoint.y
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x - 1,
-                y: this.currentPoint.y
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y - 1
@@ -454,9 +422,10 @@ export class playerHandler extends entityDynamic {
               !isWall(
                 mapInfo[this.currentPoint.x - 2]?.[this.currentPoint.y]
               ) &&
-              !isBlock(
-                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y
+              }) &&
               !this.findDoorOnPoint({
                 x: this.currentPoint.x - 2,
                 y: this.currentPoint.y
@@ -464,39 +433,23 @@ export class playerHandler extends entityDynamic {
             );
           case MoveDirection.BOTTOM:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x - 1,
+                y: this.currentPoint.y
+              }) &&
               !isWall(
                 mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y + 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x - 1,
-                y: this.currentPoint.y
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x - 1,
-                y: this.currentPoint.y
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x - 1,
                 y: this.currentPoint.y + 1
               })
             );
           case MoveDirection.RIGHT:
-            return (
-              !isBlock(
-                mapInfo[this.currentPoint.x - 1]?.[this.currentPoint.y]
-              ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x - 1,
-                y: this.currentPoint.y
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x - 1,
-                y: this.currentPoint.y
-              })
-            );
+            return isPassable({
+              x: this.currentPoint.x - 1,
+              y: this.currentPoint.y
+            });
           default:
             break;
         }
@@ -504,55 +457,32 @@ export class playerHandler extends entityDynamic {
         switch (currentDirection) {
           case MoveDirection.TOP:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y
+              }) &&
               !isWall(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y - 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x + 1,
-                y: this.currentPoint.y
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x + 1,
-                y: this.currentPoint.y
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y - 1
               })
             );
           case MoveDirection.LEFT:
+            return isPassable({
+              x: this.currentPoint.x + 1,
+              y: this.currentPoint.y
+            });
+          case MoveDirection.BOTTOM:
             return (
-              !isBlock(
-                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
-              ) &&
-              !this.findDoorOnPoint({
+              isPassable({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y
               }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x + 1,
-                y: this.currentPoint.y
-              })
-            );
-          case MoveDirection.BOTTOM:
-            return (
-              !isBlock(
-                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
-              ) &&
               !isWall(
                 mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y + 1]
               ) &&
-              !this.findDoorOnPoint({
-                x: this.currentPoint.x + 1,
-                y: this.currentPoint.y
-              }) &&
-              !this.findEnemyOnPoint({
-                x: this.currentPoint.x + 1,
-                y: this.currentPoint.y
-              }) &&
               !this.findEnemyOnPoint({
                 x: this.currentPoint.x + 1,
                 y: this.currentPoint.y + 1
@@ -563,9 +493,10 @@ export class playerHandler extends entityDynamic {
               !isWall(
                 mapInfo[this.currentPoint.x + 2]?.[this.currentPoint.y]
               ) &&
-              !isBlock(
-                mapInfo[this.currentPoint.x + 1]?.[this.currentPoint.y]
-              ) &&
+              isPassable({
+                x: this.currentPoint.x + 1,
+                y: this.currentPoint.y
+              }) &&
               !this.findDoorOnPoint({
                 x: this.currentPoint.x + 2,
                 y: this.currentPoint.y
@@ -775,9 +706,8 @@ export class playerHandler extends entityDynamic {
       messageCenter.publish(MessageType.onAttacked, {
         playerPoint: this.currentPoint,
         playerDirection: this.currentDirection,
-        enemyPoint: enemy
+        enemyPoint: enemy.currentPoint
       });
-      enemy.hasDead = true;
       return enemy;
     }
 

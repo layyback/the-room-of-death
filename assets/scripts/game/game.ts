@@ -28,7 +28,7 @@ import { burstManager } from "../burst/burstManager";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 4;
+  static currentLevel: number = 8;
 
   static get levelInfo() {
     return level[`level${Game.currentLevel}`];

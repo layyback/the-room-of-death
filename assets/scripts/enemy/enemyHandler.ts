@@ -171,22 +171,6 @@ export class enemyHandler extends entityDynamic {
       this.scheduleOnce(() => {
         this.checkAllDead();
       }, 1);
-      // switch (playerDirection) {
-      //   case MoveDirection.TOP:
-      //     this.onDeath(DeathDirection.DEATHBOTTOM);
-      //     break;
-      //   case MoveDirection.BOTTOM:
-      //     this.onDeath(DeathDirection.DEATHTOP);
-      //     break;
-      //   case MoveDirection.LEFT:
-      //     this.onDeath(DeathDirection.DEATHRIGHT);
-      //     break;
-      //   case MoveDirection.RIGHT:
-      //     this.onDeath(DeathDirection.DEATHLEFT);
-      //     break;
-      //   default:
-      //     break;
-      // }
     }
   }
   checkAllDead() {

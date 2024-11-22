@@ -33,26 +33,26 @@ import { entityDynamic } from "../common/entityDynamic";
 import { enemyHandler } from "./enemyHandler";
 import { Game } from "../game/game";
 
-interface EnemyInfo {
-  x: number;
-  y: number;
-  hasDead?: boolean;
-}
-
 @ccclass("enemyManager")
 export class enemyManager extends Component {
-  static enemyList: EnemyInfo[];
+  static enemyList: enemyHandler[] = [];
   start() {
-    enemyManager.enemyList = Game.levelInfo.enemyInfo;
     this.initEnemy();
   }
 
   initEnemy() {
     messageCenter.subscribe(
+      MessageType.nextLevel,
+      () => {
+        enemyManager.enemyList = [];
+      },
+      this
+    );
+
+    messageCenter.subscribe(
       MessageType.InitEnemy,
       enemyInfo => {
-        enemyManager.enemyList = Game.levelInfo.enemyInfo;
-        new enemyHandler(enemyInfo);
+        enemyManager.enemyList.push(new enemyHandler(enemyInfo));
       },
       this
     );

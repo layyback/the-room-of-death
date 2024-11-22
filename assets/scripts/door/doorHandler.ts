@@ -66,6 +66,13 @@ export class doorHandler extends entityStatic {
     messageCenter.subscribe(MessageType.InitDoor, this.init, this);
     messageCenter.subscribe(MessageType.onMove, this.onMove, this);
     messageCenter.subscribe(MessageType.onAllEnemyDead, this.openDoor, this);
+    messageCenter.subscribe(
+      MessageType.nextLevel,
+      () => {
+        doorHandler.isOpen = false;
+      },
+      this
+    );
   }
 
   onMove({ playerPoint }) {

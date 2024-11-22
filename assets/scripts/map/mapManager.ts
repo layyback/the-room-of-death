@@ -130,18 +130,19 @@ export class mapManager extends Component {
     });
   }
 
-  generateDoor({ tileNode, rowIndex, colIndex }) {
-    const doorInfo = Game.levelInfo.doorInfo;
-    if (doorInfo.x === rowIndex && doorInfo.y === colIndex) {
-      messageCenter.publish(MessageType.InitDoor, {
-        point: {
-          x: rowIndex,
-          y: colIndex
-        },
-        state: doorInfo.direction,
-        position: tileNode.getWorldPosition()
-      });
-    }
+  generateBurst({ tileNode, rowIndex, colIndex }) {
+    const burstInfo = Game.levelInfo.burstInfo;
+    burstInfo?.forEach(burst => {
+      if (burst.x === rowIndex && burst.y === colIndex) {
+        messageCenter.publish(MessageType.InitBurst, {
+          point: {
+            x: rowIndex,
+            y: colIndex
+          },
+          position: tileNode.getWorldPosition()
+        });
+      }
+    });
   }
 
   generateSpikes({ tileNode, rowIndex, colIndex }) {
@@ -160,19 +161,18 @@ export class mapManager extends Component {
     });
   }
 
-  generateBurst({ tileNode, rowIndex, colIndex }) {
-    const burstInfo = Game.levelInfo.burstInfo;
-    burstInfo?.forEach(burst => {
-      if (burst.x === rowIndex && burst.y === colIndex) {
-        messageCenter.publish(MessageType.InitBurst, {
-          point: {
-            x: rowIndex,
-            y: colIndex
-          },
-          position: tileNode.getWorldPosition()
-        });
-      }
-    });
+  generateDoor({ tileNode, rowIndex, colIndex }) {
+    const doorInfo = Game.levelInfo.doorInfo;
+    if (doorInfo.x === rowIndex && doorInfo.y === colIndex) {
+      messageCenter.publish(MessageType.InitDoor, {
+        point: {
+          x: rowIndex,
+          y: colIndex
+        },
+        state: doorInfo.direction,
+        position: tileNode.getWorldPosition()
+      });
+    }
   }
 
   update(deltaTime: number) {}
