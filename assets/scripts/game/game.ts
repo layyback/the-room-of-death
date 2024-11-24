@@ -32,7 +32,7 @@ import { shakeEffect } from "../map/shake";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 21;
+  static currentLevel: number = 1;
 
   static stepRecord: [] = [];
 
