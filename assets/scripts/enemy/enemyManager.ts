@@ -37,24 +37,20 @@ import { Game } from "../game/game";
 export class enemyManager extends Component {
   static enemyList: enemyHandler[] = [];
   start() {
-    this.initEnemy();
+    messageCenter.subscribe(MessageType.nextLevel, this.clearEnemyList, this);
+    messageCenter.subscribe(MessageType.InitEnemy, this.addEnemy, this);
+  }
+  onDestroy() {
+    this.clearEnemyList();
+    messageCenter.unsubscribe(MessageType.nextLevel, this.clearEnemyList, this);
+    messageCenter.unsubscribe(MessageType.InitEnemy, this.addEnemy, this);
   }
 
-  initEnemy() {
-    messageCenter.subscribe(
-      MessageType.nextLevel,
-      () => {
-        enemyManager.enemyList = [];
-      },
-      this
-    );
+  clearEnemyList() {
+    enemyManager.enemyList = [];
+  }
 
-    messageCenter.subscribe(
-      MessageType.InitEnemy,
-      enemyInfo => {
-        enemyManager.enemyList.push(new enemyHandler(enemyInfo));
-      },
-      this
-    );
+  addEnemy(enemyInfo) {
+    enemyManager.enemyList.push(new enemyHandler(enemyInfo));
   }
 }

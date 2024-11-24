@@ -1,4 +1,10 @@
-import { DoorState, EnemyType, PlayerState, TileType } from "../utils/enum";
+import {
+  DoorState,
+  EnemyType,
+  PlayerState,
+  SpikeType,
+  TileType
+} from "../utils/enum";
 
 export const mapInfo = [
   [
@@ -298,3 +304,22 @@ export const doorInfo = {
   y: 1,
   direction: DoorState.CLOSELEFT
 };
+
+export const spikeInfo = [
+  {
+    x: 4,
+    y: 3,
+    type: SpikeType.THREE
+  }
+];
+
+export const burstInfo = [
+  {
+    x: 3,
+    y: 4
+  },
+  {
+    x: 3,
+    y: 5
+  }
+];

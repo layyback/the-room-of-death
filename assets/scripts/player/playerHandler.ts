@@ -16,7 +16,8 @@ import {
   RigidBody2D,
   ERigidBody2DType,
   UITransform,
-  Size
+  Size,
+  director
 } from "cc";
 const { ccclass, property } = _decorator;
 import { loadReources, isWall, isBlock, isCliff } from "../utils";
@@ -24,9 +25,11 @@ import { MessageType, messageCenter } from "../game/messageCenter";
 import {
   AttackDirection,
   DeathDirection,
+  FadeType,
   MoveDirection,
   PlayerDeathType,
   PlayerState,
+  ShakeType,
   TileSize,
   TileType
 } from "../utils/enum";
@@ -244,6 +247,16 @@ export class playerHandler extends entityDynamic {
     this.initOnAttacked();
   }
 
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.InitPlayer, this.init, this);
+    messageCenter.unsubscribe(MessageType.Move, this.initMove, this);
+    messageCenter.unsubscribe(
+      MessageType.onPlayerAttacked,
+      this.onPlayerAttacked,
+      this
+    );
+  }
+
   initPlayer() {
     messageCenter.subscribe(MessageType.InitPlayer, this.init, this);
   }
@@ -254,13 +267,24 @@ export class playerHandler extends entityDynamic {
   }
 
   initControl() {
-    console.log("init control");
-
     messageCenter.subscribe(MessageType.Move, this.initMove, this);
+  }
+
+  initOnAttacked(): void {
+    messageCenter.subscribe(
+      MessageType.onPlayerAttacked,
+      this.onPlayerAttacked,
+      this
+    );
+  }
+
+  onPlayerAttacked({ type = PlayerDeathType.NORMAL }) {
+    this.onDeath(DeathDirection[`${type}DEATH${this.currentDirection}`]);
   }
 
   findEnemyOnPoint({ x, y }) {
     const enemyList = enemyManager.enemyList;
+
     return enemyList.find(
       item =>
         !item.hasDead && item.currentPoint.x === x && item.currentPoint.y === y
@@ -708,20 +732,13 @@ export class playerHandler extends entityDynamic {
         playerDirection: this.currentDirection,
         enemyPoint: enemy.currentPoint
       });
+      this.scheduleOnce(() => {
+        this.handleShake(direction);
+      }, 0.5);
       return enemy;
     }
 
     return false;
-  }
-
-  initOnAttacked(): void {
-    messageCenter.subscribe(
-      MessageType.onPlayerAttacked,
-      ({ type = PlayerDeathType.NORMAL }) => {
-        this.onDeath(DeathDirection[`${type}DEATH${this.currentDirection}`]);
-      },
-      this
-    );
   }
 
   initMove(direction: MoveDirection) {
@@ -731,9 +748,79 @@ export class playerHandler extends entityDynamic {
     if (!this.checkCanMove(direction)) {
       this.isMoving = true;
       this.animationComponent.play(`BLOCK${direction}${this.currentDirection}`);
+      this.handleShake(direction);
       return;
     }
     this.onMove(direction);
+  }
+
+  handleShake(direction: MoveDirection) {
+    switch (direction) {
+      case MoveDirection.TOP:
+      case MoveDirection.BOTTOM:
+      case MoveDirection.LEFT:
+      case MoveDirection.RIGHT:
+        messageCenter.publish(MessageType.onShake, {
+          type: ShakeType[direction]
+        });
+        break;
+
+      case MoveDirection.TURNLEFT:
+        switch (this.currentDirection) {
+          case MoveDirection.TOP:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.LEFT
+            });
+            break;
+          case MoveDirection.BOTTOM:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.RIGHT
+            });
+            break;
+          case MoveDirection.LEFT:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.BOTTOM
+            });
+            break;
+          case MoveDirection.RIGHT:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.TOP
+            });
+            break;
+          default:
+            break;
+        }
+        break;
+      case MoveDirection.TURNRIGHT:
+        switch (this.currentDirection) {
+          case MoveDirection.TOP:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.RIGHT
+            });
+            break;
+          case MoveDirection.BOTTOM:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.LEFT
+            });
+            break;
+          case MoveDirection.LEFT:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.TOP
+            });
+            break;
+          case MoveDirection.RIGHT:
+            messageCenter.publish(MessageType.onShake, {
+              type: ShakeType.BOTTOM
+            });
+            break;
+          default:
+            break;
+        }
+        break;
+
+      default:
+        break;
+    }
   }
 
   onMove(direction: MoveDirection) {
@@ -744,6 +831,14 @@ export class playerHandler extends entityDynamic {
       playerDirection: this.currentDirection,
       moveDirection: direction
     });
+  }
+
+  onDeath(deathDirection: DeathDirection): void {
+    super.onDeath(deathDirection);
+    this.scheduleOnce(() => {
+      this.handleShake(this.currentDirection);
+      Game.gameOver();
+    }, 0.5);
   }
 
   update(deltaTime: number) {}

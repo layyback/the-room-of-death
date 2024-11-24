@@ -439,13 +439,13 @@ export const enemyInfo = [
   {
     x: 2,
     y: 5,
-    type: EnemyType.IRONSKELETON
+    type: EnemyType.WOODENSKELETON
   },
-  // {
-  //   x: 7,
-  //   y: 6,
-  //   type: EnemyType.WOODENSKELETON
-  // }
+  {
+    x: 7,
+    y: 6,
+    type: EnemyType.WOODENSKELETON
+  }
 ];
 
 export const doorInfo = {

@@ -48,7 +48,6 @@ interface IStateMap {
 @ccclass("burstHandler")
 export class burstHandler extends entityStatic {
   currentStep: number = 0;
-  hasDestroy: boolean = false;
   playerPoint: Record<"x" | "y", number>;
 
   get stateMap(): Record<BurstState, IStateMap> {
@@ -73,9 +72,17 @@ export class burstHandler extends entityStatic {
     this.init(burstInfo);
   }
 
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.unsubscribe(MessageType.onAttacked, this.initAttack, this);
+    messageCenter.unsubscribe(MessageType.nextLevel, this.onDestroy, this);
+  }
+
   async init({ point, position, type, state }) {
     super.init({ point, position, state: BurstState.IDLE, size: TileSize });
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.subscribe(MessageType.onAttacked, this.initAttack, this);
+    messageCenter.subscribe(MessageType.nextLevel, this.onDestroy, this);
   }
 
   initAttack({ playerPoint, playerDirection }) {
@@ -90,10 +97,12 @@ export class burstHandler extends entityStatic {
       this.currentStep++;
       if (this.currentStep >= maxStep) {
         this.currentStep = maxStep;
-        this.checkAttack();
+        console.log(this.currentStep, playerPoint, this.currentPoint);
+
+        this.onAttack();
+        this.hasDestroy = true;
         this.scheduleOnce(() => {
           this.state = BurstState.DEATH;
-          this.hasDestroy = true;
         }, 0.15);
       } else {
         this.scheduleOnce(() => {
@@ -104,9 +113,10 @@ export class burstHandler extends entityStatic {
     this.playerPoint = playerPoint;
   }
 
-  checkAttack() {
+  onAttack() {
     const { x, y } = this.playerPoint;
     const { x: pX, y: pY } = this.currentPoint;
+
     if (x === pX && y === pY) {
       messageCenter.publish(MessageType.onPlayerAttacked, {
         type: PlayerDeathType.AIRDEATH

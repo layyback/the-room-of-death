@@ -36,25 +36,23 @@ import { Game } from "../game/game";
 @ccclass("burstManager")
 export class burstManager extends Component {
   static burstList: burstHandler[] = [];
+
   start() {
-    this.initBurst();
+    messageCenter.subscribe(MessageType.nextLevel, this.clearBurstList, this);
+    messageCenter.subscribe(MessageType.InitBurst, this.addBurst, this);
   }
 
-  initBurst() {
-    messageCenter.subscribe(
-      MessageType.nextLevel,
-      () => {
-        burstManager.burstList = [];
-      },
-      this
-    );
+  clearBurstList() {
+    burstManager.burstList = [];
+  }
 
-    messageCenter.subscribe(
-      MessageType.InitBurst,
-      burstInfo => {
-        burstManager.burstList.push(new burstHandler(burstInfo));
-      },
-      this
-    );
+  addBurst(burstInfo) {
+    burstManager.burstList.push(new burstHandler(burstInfo));
+  }
+
+  protected onDestroy(): void {
+    this.clearBurstList();
+    messageCenter.unsubscribe(MessageType.nextLevel, this.clearBurstList, this);
+    messageCenter.unsubscribe(MessageType.InitBurst, this.addBurst, this);
   }
 }

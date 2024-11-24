@@ -85,11 +85,12 @@ export class spikeHandler extends entityStatic {
     this.init(spikeInfo);
   }
 
-  async init({ point, position, type, state }) {
+  async init({ point, position, type = this.type, state }) {
     this.type = type;
     super.init({ point, position, state: SpikeType.ZERO });
 
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.subscribe(MessageType.nextLevel, this.onNextLevel, this);
 
     this.animationComponent.on(
       Animation.EventType.FINISHED,
@@ -98,7 +99,18 @@ export class spikeHandler extends entityStatic {
     );
   }
 
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.unsubscribe(MessageType.nextLevel, this.onNextLevel, this);
+  }
+
+  onNextLevel() {
+    this.hasDestroy = true;
+    this.onDestroy();
+  }
+
   initAttack({ playerPoint, playerDirection }) {
+    if (this.hasDestroy) return;
     this.currentStep++;
     const maxStep = SpikeStep[this.type] + 1;
     if (this.currentStep >= maxStep) {

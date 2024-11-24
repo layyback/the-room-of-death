@@ -65,13 +65,16 @@ export class smokeHandler extends entityStatic {
 
   protected start(): void {
     messageCenter.subscribe(MessageType.onMove, this.createSmoke, this);
-    messageCenter.subscribe(
-      MessageType.nextLevel,
-      () => {
-        this.entity = null;
-      },
-      this
-    );
+    messageCenter.subscribe(MessageType.nextLevel, this.resetEntity, this);
+  }
+
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.onMove, this.createSmoke, this);
+    messageCenter.unsubscribe(MessageType.nextLevel, this.resetEntity, this);
+  }
+
+  resetEntity() {
+    this.entity = null;
   }
 
   async createSmoke({ playerPoint, playerPosition, moveDirection }) {

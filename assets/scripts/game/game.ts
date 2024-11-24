@@ -10,13 +10,16 @@ import {
   randomRange,
   randomRangeInt,
   Input,
-  Event
+  Event,
+  director,
+  find,
+  Label
 } from "cc";
 const { ccclass, property } = _decorator;
 import level from "../level/level";
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "./messageCenter";
-import { MoveDirection } from "../utils/enum";
+import { FadeType, MoveDirection } from "../utils/enum";
 import { Keyboard } from "./keyboard";
 import { mapManager } from "../map/mapManager";
 import { playerHandler } from "../player/playerHandler";
@@ -25,10 +28,11 @@ import { doorHandler } from "../door/doorHandler";
 import { smokeHandler } from "../smoke/smokeHandler";
 import { spikeManager } from "../spike/spikeManager";
 import { burstManager } from "../burst/burstManager";
+import { shakeEffect } from "../map/shake";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 8;
+  static currentLevel: number = 1;
 
   static get levelInfo() {
     return level[`level${Game.currentLevel}`];
@@ -36,10 +40,32 @@ export class Game extends Component {
 
   static nextLevel() {
     Game.currentLevel++;
+    find("Canvas/level").getComponent(
+      Label
+    ).string = `第 ${Game.currentLevel} 关`;
     messageCenter.publish(MessageType.nextLevel, Game.currentLevel);
   }
+
+  static gameOver() {
+    console.log("game over");
+    messageCenter.removeAllSubscribers();
+    Game.currentLevel = 1;
+    setTimeout(() => {
+      messageCenter.publish(MessageType.onFade, {
+        type: FadeType.OUT
+      });
+      setTimeout(() => {
+        director.loadScene("start");
+      }, 1000);
+    }, 1000);
+  }
   start() {
-    this.addComponent(mapManager);
+    console.log("game start");
+
+    messageCenter.publish(MessageType.onFade, {
+      type: FadeType.IN
+    });
+
     this.addComponent(playerHandler);
     this.addComponent(enemyManager);
     this.addComponent(doorHandler);
@@ -47,6 +73,8 @@ export class Game extends Component {
     this.addComponent(smokeHandler);
     this.addComponent(spikeManager);
     this.addComponent(burstManager);
+    this.addComponent(shakeEffect);
+    this.addComponent(mapManager);
   }
   update(deltaTime: number) {}
 }

@@ -45,6 +45,7 @@ interface IStateMap {
 export class doorHandler extends entityStatic {
   entity: Node;
   currentState: DoorState = DoorState.CLOSETOP;
+
   static isOpen: boolean = false;
 
   stateMap: Record<string, IStateMap> = {
@@ -66,13 +67,14 @@ export class doorHandler extends entityStatic {
     messageCenter.subscribe(MessageType.InitDoor, this.init, this);
     messageCenter.subscribe(MessageType.onMove, this.onMove, this);
     messageCenter.subscribe(MessageType.onAllEnemyDead, this.openDoor, this);
-    messageCenter.subscribe(
-      MessageType.nextLevel,
-      () => {
-        doorHandler.isOpen = false;
-      },
-      this
-    );
+    messageCenter.subscribe(MessageType.nextLevel, this.resetDoor, this);
+  }
+
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.InitDoor, this.init, this);
+    messageCenter.unsubscribe(MessageType.onMove, this.onMove, this);
+    messageCenter.unsubscribe(MessageType.onAllEnemyDead, this.openDoor, this);
+    messageCenter.unsubscribe(MessageType.nextLevel, this.resetDoor, this);
   }
 
   onMove({ playerPoint }) {
@@ -80,6 +82,7 @@ export class doorHandler extends entityStatic {
       playerPoint.x === this.currentPoint.x &&
       playerPoint.y === this.currentPoint.y
     ) {
+      messageCenter.publish(MessageType.onFade, {});
       this.scheduleOnce(() => {
         Game.nextLevel();
       }, 0.5);
@@ -89,5 +92,9 @@ export class doorHandler extends entityStatic {
   openDoor() {
     this.state = DoorState.OPEN;
     doorHandler.isOpen = true;
+  }
+
+  resetDoor() {
+    doorHandler.isOpen = false;
   }
 }

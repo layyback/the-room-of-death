@@ -46,7 +46,7 @@ export abstract class entityStatic extends Component {
   currentState;
   currentPoint: Record<"x" | "y", number>;
   animationComponent: AnimationComponent;
-
+  hasDestroy: boolean = false;
   abstract stateMap: Record<string, IStateMap>;
 
   get state() {

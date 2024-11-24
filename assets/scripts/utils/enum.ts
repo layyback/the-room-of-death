@@ -167,3 +167,16 @@ export enum PlayerDeathType {
   NORMAL = "",
   AIRDEATH = "AIR"
 }
+
+export enum ShakeType {
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT"
+}
+
+export enum FadeType {
+  NORMAL = "NORMAL",
+  IN = "IN",
+  OUT = "OUT"
+}

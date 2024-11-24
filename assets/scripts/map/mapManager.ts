@@ -30,14 +30,16 @@ export class mapManager extends Component {
 
   initMap() {
     this.generateMap();
-    messageCenter.subscribe(
-      MessageType.nextLevel,
-      () => {
-        this.clearMap();
-        this.generateMap();
-      },
-      this
-    );
+    messageCenter.subscribe(MessageType.nextLevel, this.regenerateMap, this);
+  }
+
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.nextLevel, this.regenerateMap, this);
+  }
+
+  regenerateMap() {
+    this.clearMap();
+    this.generateMap();
   }
 
   async generateMap() {
@@ -51,7 +53,7 @@ export class mapManager extends Component {
     const tileList = await loadReources("texture/tile/tile");
     const mapInfo = Game.levelInfo.mapInfo;
 
-    map.setPosition(-this.tileSize * ((mapInfo.length - 1) / 2), 320);
+    map.setPosition(-this.tileSize * ((mapInfo.length - 1) / 2), 400);
     mapInfo.forEach((row, rowIndex) => {
       row.forEach((tile, colIndex) => {
         // 根据tile的值生成对应的地图元素
@@ -97,7 +99,8 @@ export class mapManager extends Component {
   }
 
   clearMap() {
-    this.node.removeAllChildren();
+    // this.node.removeAllChildren();
+    this.node.destroyAllChildren();
   }
 
   generatePlayer({ tileNode, rowIndex, colIndex }) {

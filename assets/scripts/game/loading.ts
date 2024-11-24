@@ -20,7 +20,7 @@ import {
 const { ccclass, property } = _decorator;
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "./messageCenter";
-import { MoveDirection } from "../utils/enum";
+import { FadeType, MoveDirection } from "../utils/enum";
 
 @ccclass("Loading")
 export class Loading extends Component {
@@ -35,7 +35,12 @@ export class Loading extends Component {
         ).string = `资源加载中…(${finished}/${total})`;
       },
       () => {
-        director.loadScene("game");
+        messageCenter.publish(MessageType.onFade, {
+          type: FadeType.OUT
+        });
+        this.scheduleOnce(() => {
+          director.loadScene("start");
+        }, 0.5);
       }
     );
   }

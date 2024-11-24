@@ -106,16 +106,24 @@ export class enemyHandler extends entityDynamic {
 
   async init({ point, position, type }) {
     this.type = type;
-    super.init({ point, position });
+    await super.init({ point, position });
     this.initAttack({
       playerPoint: Game.levelInfo.playerInfo,
       playerDirection: MoveDirection.TOP
     });
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);
     messageCenter.subscribe(MessageType.onAttacked, this.onAttacked, this);
+    messageCenter.subscribe(MessageType.nextLevel, this.onDestroy, this);
+  }
+
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.unsubscribe(MessageType.onAttacked, this.onAttacked, this);
+    messageCenter.unsubscribe(MessageType.nextLevel, this.onDestroy, this);
   }
 
   initAttack({ playerPoint, playerDirection }) {
+
     if (this.hasDead) return;
     const x = playerPoint.x - this.currentPoint.x;
     const y = playerPoint.y - this.currentPoint.y;
@@ -156,8 +164,9 @@ export class enemyHandler extends entityDynamic {
     }
   }
 
-  // 被攻击
+  // 攻击
   onAttack(attackDirection: AttackDirection): void {
+    if (this.hasDead) return;
     super.onAttack(attackDirection);
     messageCenter.publish(MessageType.onPlayerAttacked, {
       emenyDirection: attackDirection

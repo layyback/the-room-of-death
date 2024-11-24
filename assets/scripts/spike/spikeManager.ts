@@ -36,18 +36,14 @@ import { Game } from "../game/game";
 @ccclass("spikeManager")
 export class spikeManager extends Component {
   start() {
-    console.log('init spikeManager');
-    
-    this.initSpike();
+    messageCenter.subscribe(MessageType.InitSpike, this.addSpike, this);
   }
 
-  initSpike() {
-    messageCenter.subscribe(
-      MessageType.InitSpike,
-      spikeInfo => {
-        new spikeHandler(spikeInfo);
-      },
-      this
-    );
+  protected onDestroy(): void {
+    messageCenter.unsubscribe(MessageType.InitSpike, this.addSpike, this);
+  }
+
+  addSpike(spikeInfo) {
+    new spikeHandler(spikeInfo);
   }
 }
