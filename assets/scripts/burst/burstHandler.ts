@@ -73,6 +73,7 @@ export class burstHandler extends entityStatic {
   }
 
   protected onDestroy(): void {
+    this.hasDestroy = true;
     messageCenter.unsubscribe(MessageType.onMove, this.initAttack, this);
     messageCenter.unsubscribe(MessageType.onAttacked, this.initAttack, this);
     messageCenter.unsubscribe(MessageType.nextLevel, this.onDestroy, this);
