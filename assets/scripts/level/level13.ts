@@ -25,10 +25,6 @@ export const mapInfo = [
       type: TileType.WALL_COLUMN
     },
     {
-      src: 25,
-      type: TileType.WALL_LEFT_TOP
-    },
-    {
       src: 5,
       type: TileType.WALL_COLUMN
     },
@@ -51,8 +47,8 @@ export const mapInfo = [
       type: TileType.WALL_ROW
     },
     {
-      src: 1,
-      type: TileType.FLOOR
+      src: 17,
+      type: TileType.CLIFF_CENTER
     },
     {
       src: 1,
@@ -61,10 +57,6 @@ export const mapInfo = [
     {
       src: 1,
       type: TileType.FLOOR
-    },
-    {
-      src: 21,
-      type: TileType.WALL_ROW
     },
     {
       src: 1,
@@ -93,32 +85,28 @@ export const mapInfo = [
       type: TileType.FLOOR
     },
     {
-      src: 17,
-      type: TileType.CLIFF_CENTER
-    },
-    {
       src: 1,
       type: TileType.FLOOR
     },
     {
-      src: 1,
-      type: TileType.FLOOR
+      src: 16,
+      type: TileType.WALL_LEFT_TOP
     },
     {
-      src: 1,
-      type: TileType.FLOOR
+      src: 5,
+      type: TileType.WALL_COLUMN
     },
     {
-      src: 17,
-      type: TileType.CLIFF_CENTER
+      src: 5,
+      type: TileType.WALL_COLUMN
     },
     {
-      src: 20,
-      type: TileType.WALL_ROW
+      src: 23,
+      type: TileType.WALL_RIGHT_BOTTOM
     },
     {
-      src: 17,
-      type: TileType.CLIFF_CENTER
+      src: 19,
+      type: TileType.CLIFF_RIGHT
     }
   ],
   [
@@ -135,7 +123,7 @@ export const mapInfo = [
       type: TileType.FLOOR
     },
     {
-      src: 24,
+      src: 9,
       type: TileType.WALL_ROW
     },
     {
@@ -147,6 +135,92 @@ export const mapInfo = [
       type: null
     },
     {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
       src: 1,
       type: TileType.FLOOR
     },
@@ -157,6 +231,18 @@ export const mapInfo = [
     {
       src: 17,
       type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
     }
   ],
   [
@@ -173,28 +259,24 @@ export const mapInfo = [
       type: TileType.FLOOR
     },
     {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 17,
-      type: TileType.CLIFF_CENTER
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
       src: 9,
       type: TileType.WALL_ROW
     },
     {
       src: 17,
       type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
     }
   ],
   [
@@ -207,22 +289,6 @@ export const mapInfo = [
       type: TileType.FLOOR
     },
     {
-      src: 20,
-      type: TileType.WALL_ROW
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
       src: 1,
       type: TileType.FLOOR
     },
@@ -233,93 +299,127 @@ export const mapInfo = [
     {
       src: 17,
       type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
     }
   ],
   [
     {
       src: 21,
-      type: TileType.WALL_RIGHT_TOP
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
       type: TileType.FLOOR
     },
     {
-      src: 15,
+      src: 22,
       type: TileType.WALL_RIGHT_TOP
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
       src: 14,
-      type: TileType.WALL_RIGHT_BOTTOM
+      type: TileType.WALL_ROW
     },
     {
       src: 19,
       type: TileType.CLIFF_RIGHT
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
     }
   ]
 ];
 
 export const playerInfo = {
-  x: 1,
-  y: 7,
-  direction: PlayerState.TOP
+  x: 10,
+  y: 1,
+  direction: PlayerState.LEFT
 };
 
 export const enemyInfo = [
   {
     x: 1,
-    y: 3,
+    y: 4,
     type: EnemyType.WOODENSKELETON
   },
   {
-    x: 2,
-    y: 4,
+    x: 3,
+    y: 2,
     type: EnemyType.IRONSKELETON
   },
   {
     x: 5,
-    y: 5,
+    y: 1,
     type: EnemyType.WOODENSKELETON
   }
 ];
 
 export const doorInfo = {
-  x: 6,
-  y: 1,
-  direction: DoorState.X
+  x: 1,
+  y: 6,
+  direction: DoorState.Y
 };
-
-export const spikeInfo = [
-  {
-    x: 4,
-    y: 3,
-    type: SpikeType.THREE
-  }
-];
 
 export const burstInfo = [
   {
-    x: 3,
-    y: 4
+    x: 1,
+    y: 1
   },
   {
-    x: 3,
-    y: 5
+    x: 5,
+    y: 2
   }
 ];

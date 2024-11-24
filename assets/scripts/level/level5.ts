@@ -174,5 +174,5 @@ export const enemyInfo = [
 export const doorInfo = {
   x: 6,
   y: 1,
-  direction: DoorState.CLOSELEFT
+  direction: DoorState.X
 };

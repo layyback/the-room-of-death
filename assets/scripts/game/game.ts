@@ -32,14 +32,24 @@ import { shakeEffect } from "../map/shake";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 1;
+  static currentLevel: number = 13;
+
+  static stepRecord: [] = [];
 
   static get levelInfo() {
     return level[`level${Game.currentLevel}`];
   }
 
+  static get maxLevel() {
+    return Object.keys(level).length;
+  }
+
   static nextLevel() {
     Game.currentLevel++;
+    Game.stepRecord = [];
+    if (Game.currentLevel > Game.maxLevel) {
+      Game.gameOver();
+    }
     find("Canvas/level").getComponent(
       Label
     ).string = `第 ${Game.currentLevel} 关`;

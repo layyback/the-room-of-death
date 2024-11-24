@@ -97,8 +97,6 @@ export class burstHandler extends entityStatic {
       this.currentStep++;
       if (this.currentStep >= maxStep) {
         this.currentStep = maxStep;
-        console.log(this.currentStep, playerPoint, this.currentPoint);
-
         this.onAttack();
         this.hasDestroy = true;
         this.scheduleOnce(() => {

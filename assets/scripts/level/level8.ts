@@ -404,7 +404,7 @@ export const enemyInfo = [
 export const doorInfo = {
   x: 9,
   y: 1,
-  direction: DoorState.CLOSELEFT
+  direction: DoorState.X
 };
 
 export const burstInfo = [

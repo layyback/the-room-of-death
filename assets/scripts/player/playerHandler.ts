@@ -837,7 +837,7 @@ export class playerHandler extends entityDynamic {
     super.onDeath(deathDirection);
     this.scheduleOnce(() => {
       this.handleShake(this.currentDirection);
-      Game.gameOver();
+      // Game.gameOver();
     }, 0.5);
   }
 

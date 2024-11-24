@@ -53,7 +53,7 @@ export class mapManager extends Component {
     const tileList = await loadReources("texture/tile/tile");
     const mapInfo = Game.levelInfo.mapInfo;
 
-    map.setPosition(-this.tileSize * ((mapInfo.length - 1) / 2), 400);
+    map.setPosition(-this.tileSize * ((mapInfo.length - 1) / 2), 320);
     mapInfo.forEach((row, rowIndex) => {
       row.forEach((tile, colIndex) => {
         // 根据tile的值生成对应的地图元素

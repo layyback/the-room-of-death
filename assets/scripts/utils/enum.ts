@@ -114,8 +114,8 @@ export enum TileType {
 
 export enum DoorState {
   OPEN = "OPEN",
-  CLOSELEFT = "CLOSELEFT",
-  CLOSETOP = "CLOSETOP"
+  X = "X",
+  Y = "Y"
 }
 
 export enum SmokeDirection {
@@ -179,4 +179,17 @@ export enum FadeType {
   NORMAL = "NORMAL",
   IN = "IN",
   OUT = "OUT"
+}
+
+export enum ControlEvent {
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+  TURNLEFT = "TURNLEFT",
+  TURNRIGHT = "TURNRIGHT",
+
+  RESTART = "RESTART",
+  UNDO = "UNDO",
+  EXIT = "EXIT"
 }

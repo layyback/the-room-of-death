@@ -44,16 +44,16 @@ interface IStateMap {
 @ccclass("doorHandler")
 export class doorHandler extends entityStatic {
   entity: Node;
-  currentState: DoorState = DoorState.CLOSETOP;
+  currentState: DoorState = DoorState.Y;
 
   static isOpen: boolean = false;
 
   stateMap: Record<string, IStateMap> = {
-    [DoorState.CLOSETOP]: {
+    [DoorState.Y]: {
       spritePath: "texture/door/idle/top",
       wrapMode: AnimationClip.WrapMode.Normal
     },
-    [DoorState.CLOSELEFT]: {
+    [DoorState.X]: {
       spritePath: "texture/door/idle/left",
       wrapMode: AnimationClip.WrapMode.Normal
     },

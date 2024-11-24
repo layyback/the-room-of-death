@@ -1,8 +1,8 @@
 import {
-  BurstState,
   DoorState,
   EnemyType,
   PlayerState,
+  SpikeType,
   TileType
 } from "../utils/enum";
 
@@ -10,159 +10,27 @@ export const mapInfo = [
   [
     {
       src: 20,
+      type: TileType.WALL_LEFT_TOP
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
+      src: 18,
+      type: TileType.CLIFF_LEFT
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: 20,
       type: TileType.WALL_LEFT_BOTTOM
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 22,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 13,
-      type: TileType.WALL_LEFT_BOTTOM
-    },
-    {
-      src: null,
-      type: null
-    },
-    {
-      src: null,
-      type: null
-    },
-    {
-      src: null,
-      type: null
-    },
-    {
-      src: null,
-      type: null
-    },
-    {
-      src: null,
-      type: null
-    },
-    {
-      src: null,
-      type: null
-    },
-    {
-      src: null,
-      type: null
-    }
-  ],
-  [
-    {
-      src: 9,
-      type: TileType.WALL_ROW
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 17,
-      type: TileType.CLIFF_CENTER
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 9,
-      type: TileType.WALL_ROW
-    },
-    {
-      src: 16,
-      type: TileType.WALL_RIGHT_TOP
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 5,
-      type: TileType.WALL_COLUMN
-    },
-    {
-      src: 23,
-      type: TileType.WALL_LEFT_BOTTOM
-    },
-    {
-      src: 17,
-      type: TileType.CLIFF_CENTER
-    }
-  ],
-  [
-    {
-      src: 9,
-      type: TileType.WALL_ROW
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 17,
-      type: TileType.CLIFF_CENTER
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 15,
-      type: TileType.WALL_RIGHT_TOP
-    },
-    {
-      src: 14,
-      type: TileType.WALL_RIGHT_BOTTOM
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
-    },
-    {
-      src: 17,
-      type: TileType.CLIFF_CENTER
-    },
-    {
-      src: 1,
-      type: TileType.FLOOR
     },
     {
       src: 18,
@@ -175,12 +43,64 @@ export const mapInfo = [
       type: TileType.WALL_ROW
     },
     {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
       src: 17,
       type: TileType.CLIFF_CENTER
     },
     {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
       src: 1,
       type: TileType.FLOOR
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: 21,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
@@ -203,8 +123,14 @@ export const mapInfo = [
       type: TileType.FLOOR
     },
     {
-      src: 1,
-      type: TileType.FLOOR
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
     },
     {
       src: 1,
@@ -215,8 +141,16 @@ export const mapInfo = [
       type: TileType.CLIFF_CENTER
     },
     {
+      src: null,
+      type: null
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
       src: 20,
-      type: TileType.WALL_LEFT_BOTTOM
+      type: TileType.WALL_ROW
     },
     {
       src: 17,
@@ -225,63 +159,129 @@ export const mapInfo = [
   ],
   [
     {
-      src: 15,
-      type: TileType.WALL_RIGHT_TOP
+      src: 9,
+      type: TileType.WALL_ROW
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 1,
+      type: TileType.FLOOR
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 22,
+      type: TileType.WALL_ROW
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 23,
+      type: TileType.WALL_ROW
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 1,
+      type: TileType.FLOOR
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 9,
+      type: TileType.WALL_ROW
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 1,
+      type: TileType.FLOOR
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 1,
+      type: TileType.FLOOR
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 1,
+      type: TileType.FLOOR
     },
     {
-      src: 5,
-      type: TileType.WALL_COLUMN
+      src: 1,
+      type: TileType.FLOOR
     },
     {
-      src: 14,
-      type: TileType.WALL_RIGHT_BOTTOM
+      src: 9,
+      type: TileType.WALL_ROW
     },
     {
-      src: 19,
-      type: TileType.CLIFF_RIGHT
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    }
+  ],
+  [
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: 9,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    }
+  ],
+  [
+    {
+      src: 21,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 1,
+      type: TileType.FLOOR
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: null,
+      type: null
+    },
+    {
+      src: 21,
+      type: TileType.WALL_ROW
+    },
+    {
+      src: 17,
+      type: TileType.CLIFF_CENTER
     }
   ]
 ];
 
 export const playerInfo = {
-  x: 2,
-  y: 11,
+  x: 3,
+  y: 5,
   direction: PlayerState.TOP
 };
 
@@ -289,11 +289,11 @@ export const enemyInfo = [
   {
     x: 1,
     y: 1,
-    type: EnemyType.WOODENSKELETON
+    type: EnemyType.IRONSKELETON
   },
   {
-    x: 2,
-    y: 7,
+    x: 6,
+    y: 2,
     type: EnemyType.WOODENSKELETON
   }
 ];
@@ -306,23 +306,11 @@ export const doorInfo = {
 
 export const burstInfo = [
   {
-    x: 3,
-    y: 1
+    x: 4,
+    y: 2
   },
   {
-    x: 3,
-    y: 4
-  },
-  {
-    x: 3,
-    y: 5
-  },
-  {
-    x: 2,
-    y: 10
-  },
-  {
-    x: 3,
-    y: 10
+    x: 4,
+    y: 3
   }
 ];
