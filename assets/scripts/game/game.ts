@@ -32,7 +32,7 @@ import { shakeEffect } from "../map/shake";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 1;
+  static currentLevel: number = 21;
 
   static stepRecord: [] = [];
 
@@ -61,14 +61,12 @@ export class Game extends Component {
     console.log("game over");
     messageCenter.removeAllSubscribers();
     Game.currentLevel = 1;
+    messageCenter.publish(MessageType.onFade, {
+      type: FadeType.OUT
+    });
     setTimeout(() => {
-      messageCenter.publish(MessageType.onFade, {
-        type: FadeType.OUT
-      });
-      setTimeout(() => {
-        director.loadScene("start");
-      }, 1000);
-    }, 1000);
+      director.loadScene("start");
+    }, 0);
   }
   start() {
     console.log("game start");
