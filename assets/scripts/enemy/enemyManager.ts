@@ -35,7 +35,16 @@ import { Game } from "../game/game";
 
 @ccclass("enemyManager")
 export class enemyManager extends Component {
-  static enemyList: enemyHandler[] = [];
+  enemyList: enemyHandler[] = [];
+
+  private static _instance: enemyManager;
+  static getInstance(context?: Component) {
+    if (!enemyManager._instance && context) {
+      enemyManager._instance = context.addComponent(this);
+    }
+    return enemyManager._instance;
+  }
+
   start() {
     messageCenter.subscribe(MessageType.nextLevel, this.clearEnemyList, this);
     messageCenter.subscribe(MessageType.InitEnemy, this.addEnemy, this);
@@ -47,10 +56,10 @@ export class enemyManager extends Component {
   }
 
   clearEnemyList() {
-    enemyManager.enemyList = [];
+    this.enemyList = [];
   }
 
   addEnemy(enemyInfo) {
-    enemyManager.enemyList.push(new enemyHandler(enemyInfo));
+    this.enemyList.push(new enemyHandler(enemyInfo));
   }
 }

@@ -43,25 +43,24 @@ interface IStateMap {
 
 @ccclass("doorHandler")
 export class doorHandler extends entityStatic {
-  entity: Node;
   currentState: DoorState = DoorState.Y;
-
-  static isOpen: boolean = false;
-
-  stateMap: Record<string, IStateMap> = {
-    [DoorState.Y]: {
-      spritePath: "texture/door/idle/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [DoorState.X]: {
-      spritePath: "texture/door/idle/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [DoorState.OPEN]: {
-      spritePath: "texture/door/death",
-      wrapMode: AnimationClip.WrapMode.Normal
-    }
-  };
+  initState: DoorState = DoorState.Y;
+  get stateMap(): Record<string, IStateMap> {
+    return {
+      [DoorState.Y]: {
+        spritePath: "texture/door/idle/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [DoorState.X]: {
+        spritePath: "texture/door/idle/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [DoorState.OPEN]: {
+        spritePath: "texture/door/death",
+        wrapMode: AnimationClip.WrapMode.Normal
+      }
+    };
+  }
 
   protected start(): void {
     messageCenter.subscribe(MessageType.InitDoor, this.init, this);
@@ -75,6 +74,11 @@ export class doorHandler extends entityStatic {
     messageCenter.unsubscribe(MessageType.onMove, this.onMove, this);
     messageCenter.unsubscribe(MessageType.onAllEnemyDead, this.openDoor, this);
     messageCenter.unsubscribe(MessageType.nextLevel, this.resetDoor, this);
+  }
+
+  async init(doorInfo) {
+    super.init(doorInfo);
+    this.initState = doorInfo.state;
   }
 
   onMove({ playerPoint }) {
@@ -91,10 +95,9 @@ export class doorHandler extends entityStatic {
 
   openDoor() {
     this.state = DoorState.OPEN;
-    doorHandler.isOpen = true;
   }
 
   resetDoor() {
-    doorHandler.isOpen = false;
+    this.state = this.initState;
   }
 }

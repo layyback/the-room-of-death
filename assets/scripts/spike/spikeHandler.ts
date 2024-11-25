@@ -50,6 +50,10 @@ export class spikeHandler extends entityStatic {
   currentStep: number = 0;
   playerPoint: Record<"x" | "y", number>;
 
+  get maxStep() {
+    return SpikeStep[this.type] + 1;
+  }
+
   get stateMap(): Record<SpikeType, IStateMap> {
     const subDir = `spikes/spikes${this.type.toLocaleLowerCase()}`;
     return {
@@ -112,8 +116,7 @@ export class spikeHandler extends entityStatic {
   initAttack({ playerPoint, playerDirection }) {
     if (this.hasDestroy) return;
     this.currentStep++;
-    const maxStep = SpikeStep[this.type] + 1;
-    if (this.currentStep >= maxStep) {
+    if (this.currentStep >= this.maxStep) {
       this.checkAttack();
     }
     this.state = SpikeStep[this.currentStep];
@@ -121,8 +124,7 @@ export class spikeHandler extends entityStatic {
   }
 
   onAnimationFinished() {
-    const maxStep = SpikeStep[this.type] + 1;
-    if (this.currentStep >= maxStep) {
+    if (this.currentStep >= this.maxStep) {
       this.currentStep = 0;
       this.state = SpikeStep[this.currentStep];
     }

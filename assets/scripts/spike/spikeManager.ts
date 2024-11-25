@@ -35,15 +35,32 @@ import { Game } from "../game/game";
 
 @ccclass("spikeManager")
 export class spikeManager extends Component {
+  private static _instance: spikeManager;
+  static getInstance(context?: Component) {
+    if (!spikeManager._instance && context) {
+      spikeManager._instance = context.addComponent(this);
+    }
+    return spikeManager._instance;
+  }
+
+  spikeList: spikeHandler[] = [];
+
   start() {
     messageCenter.subscribe(MessageType.InitSpike, this.addSpike, this);
+    messageCenter.subscribe(MessageType.nextLevel, this.clearSpikeList, this);
   }
 
   protected onDestroy(): void {
+    this.clearSpikeList();
     messageCenter.unsubscribe(MessageType.InitSpike, this.addSpike, this);
+    messageCenter.unsubscribe(MessageType.nextLevel, this.clearSpikeList, this);
   }
 
   addSpike(spikeInfo) {
-    new spikeHandler(spikeInfo);
+    this.spikeList.push(new spikeHandler(spikeInfo));
+  }
+
+  clearSpikeList() {
+    this.spikeList = [];
   }
 }

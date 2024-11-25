@@ -39,16 +39,41 @@ interface IStateMap {
 }
 
 @ccclass("entityDynamic")
-export abstract class entityDynamic extends Component {
+export class entityDynamic extends Component {
   entity: Node;
   moveStep: number = TileSize;
   isMoving: boolean = false;
-  hasDead: boolean = false;
   currentDirection: MoveDirection = MoveDirection.TOP;
   currentPoint: Record<"x" | "y", number>;
   animationComponent: AnimationComponent;
 
-  abstract stateMap: Record<string, IStateMap>;
+  _stateMap: Record<string, IStateMap>;
+  _isDead: boolean = false;
+
+  get stateMap(): Record<string, IStateMap> {
+    return this._stateMap;
+  }
+  set stateMap(stateMap) {
+    this._stateMap = stateMap;
+  }
+
+  get hasDead(): boolean {
+    return this._isDead;
+  }
+  set hasDead(hasDead) {
+    this._isDead = hasDead;
+    if (!hasDead) {
+      this.animationComponent.play(this.currentDirection);
+    }
+  }
+
+  private static _instance: entityDynamic;
+  static getInstance(context?: Component) {
+    if (!entityDynamic._instance && context) {
+      entityDynamic._instance = context.addComponent(this);
+    }
+    return entityDynamic._instance;
+  }
 
   get direction() {
     return this.currentDirection;

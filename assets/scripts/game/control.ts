@@ -27,6 +27,7 @@ export class Control extends Component {
         messageCenter.publish(MessageType.nextLevel, Game.currentLevel);
         break;
       case ControlEvent.UNDO:
+        Game.undo();
         break;
       case ControlEvent.EXIT:
         Game.gameOver();

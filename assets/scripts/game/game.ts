@@ -32,14 +32,25 @@ import { shakeEffect } from "../map/shake";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 1;
+  static currentLevel: number = 8;
+  static stepRecord: Array<{
+    playerHandler;
+    enemyManager;
+    doorHandler;
+    spikeManager;
+    burstManager;
+  }> = [];
 
-  static stepRecord: [] = [];
+  static playerHandler;
+  static doorHandler;
+  static smokeHandler;
+  static enemyManager;
+  static spikeManager;
+  static burstManager;
 
   static get levelInfo() {
     return level[`level${Game.currentLevel}`];
   }
-
   static get maxLevel() {
     return Object.keys(level).length;
   }
@@ -51,39 +62,113 @@ export class Game extends Component {
       Game.gameOver();
       return;
     }
-    find("Canvas/level").getComponent(
+    find("Canvas/level/text").getComponent(
       Label
     ).string = `第 ${Game.currentLevel} 关`;
     messageCenter.publish(MessageType.nextLevel, Game.currentLevel);
   }
 
+  static addRecord() {
+    Game.stepRecord.push({
+      playerHandler: {
+        direction: Game.playerHandler.direction,
+        hasDead: Game.playerHandler.hasDead,
+        currentPoint: { ...Game.playerHandler.currentPoint },
+        position: { ...Game.playerHandler.entity.position }
+      },
+      enemyManager: Game.enemyManager.enemyList.map(enemy => {
+        return {
+          direction: enemy.direction,
+          hasDead: enemy.hasDead,
+          currentPoint: { ...enemy.currentPoint },
+          position: { ...enemy.entity.position }
+        };
+      }),
+      doorHandler: {
+        state: Game.doorHandler.state
+      },
+      spikeManager: Game.spikeManager.spikeList.map(spike => {
+        return {
+          state: spike.state,
+          currentStep: spike.currentStep,
+          hasDestroy: spike.hasDestroy,
+          playerPoint: { ...spike.playerPoint }
+        };
+      }),
+      burstManager: Game.burstManager.burstList.map(burst => {
+        return {
+          state: burst.state,
+          currentStep: burst.currentStep,
+          hasDestroy: burst.hasDestroy,
+          playerPoint: { ...burst.playerPoint }
+        };
+      })
+    });
+  }
+
+  static undo() {
+    const step = Game.stepRecord.pop();
+    if (!step) return;
+
+    Game.resetState(Game.playerHandler, step.playerHandler);
+    Game.resetState(Game.doorHandler, step.doorHandler);
+    Game.enemyManager.enemyList.forEach(enemy => {
+      Game.resetState(
+        enemy,
+        step.enemyManager[Game.enemyManager.enemyList.indexOf(enemy)]
+      );
+    });
+    Game.spikeManager.spikeList.forEach(spike => {
+      Game.resetState(
+        spike,
+        step.spikeManager[Game.spikeManager.spikeList.indexOf(spike)]
+      );
+    });
+    Game.burstManager.burstList.forEach(burst => {
+      Game.resetState(
+        burst,
+        step.burstManager[Game.burstManager.burstList.indexOf(burst)]
+      );
+    });
+  }
+
+  static resetState(handler, record) {
+    Object.keys(record).forEach(key => {
+      if (key === "position") {
+        handler.entity.position = record[key];
+      } else {
+        handler[key] = record[key];
+      }
+    });
+  }
+
   static gameOver() {
     console.log("game over");
-    messageCenter.removeAllSubscribers();
     Game.currentLevel = 1;
     messageCenter.publish(MessageType.onFade, {
       type: FadeType.OUT
     });
+    messageCenter.removeAllSubscribers();
     setTimeout(() => {
       director.loadScene("start");
     }, 0);
   }
   start() {
     console.log("game start");
-
     messageCenter.publish(MessageType.onFade, {
       type: FadeType.IN
     });
 
-    this.addComponent(playerHandler);
-    this.addComponent(enemyManager);
-    this.addComponent(doorHandler);
-    this.addComponent(Keyboard);
-    this.addComponent(smokeHandler);
-    this.addComponent(spikeManager);
-    this.addComponent(burstManager);
+    Game.playerHandler = playerHandler.getInstance(this);
+    Game.enemyManager = enemyManager.getInstance(this);
+    Game.doorHandler = doorHandler.getInstance(this);
+    Game.smokeHandler = smokeHandler.getInstance(this);
+    Game.spikeManager = spikeManager.getInstance(this);
+    Game.burstManager = burstManager.getInstance(this);
+
     this.addComponent(shakeEffect);
     this.addComponent(mapManager);
+    this.addComponent(Keyboard);
   }
   update(deltaTime: number) {}
 }

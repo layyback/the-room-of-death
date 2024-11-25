@@ -25,6 +25,7 @@ import { MessageType, messageCenter } from "../game/messageCenter";
 import {
   AttackDirection,
   DeathDirection,
+  DoorState,
   FadeType,
   MoveDirection,
   PlayerDeathType,
@@ -46,200 +47,202 @@ interface IStateMap {
 }
 
 export class playerHandler extends entityDynamic {
-  stateMap: Record<PlayerState, IStateMap> = {
-    [PlayerState.TOP]: {
-      spritePath: "texture/player/idle/top",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [PlayerState.BOTTOM]: {
-      spritePath: "texture/player/idle/bottom",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [PlayerState.LEFT]: {
-      spritePath: "texture/player/idle/left",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [PlayerState.RIGHT]: {
-      spritePath: "texture/player/idle/right",
-      wrapMode: AnimationClip.WrapMode.Loop
-    },
-    [PlayerState.TURNLEFTTOP]: {
-      spritePath: "texture/player/turnleft/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNLEFTLEFT]: {
-      spritePath: "texture/player/turnleft/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNLEFTRIGHT]: {
-      spritePath: "texture/player/turnleft/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNLEFTBOTTOM]: {
-      spritePath: "texture/player/turnleft/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNRIGHTTOP]: {
-      spritePath: "texture/player/turnright/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNRIGHTRIGHT]: {
-      spritePath: "texture/player/turnright/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNRIGHTBOTTOM]: {
-      spritePath: "texture/player/turnright/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.TURNRIGHTLEFT]: {
-      spritePath: "texture/player/turnright/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTOPTOP]: {
-      spritePath: "texture/player/blockfront/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTOPLEFT]: {
-      spritePath: "texture/player/blockright/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTOPRIGHT]: {
-      spritePath: "texture/player/blockleft/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTOPBOTTOM]: {
-      spritePath: "texture/player/blockback/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKBOTTOMTOP]: {
-      spritePath: "texture/player/blockback/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKBOTTOMLEFT]: {
-      spritePath: "texture/player/blockleft/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKBOTTOMRIGHT]: {
-      spritePath: "texture/player/blockright/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKBOTTOMBOTTOM]: {
-      spritePath: "texture/player/blockfront/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKLEFTTOP]: {
-      spritePath: "texture/player/blockleft/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKLEFTLEFT]: {
-      spritePath: "texture/player/blockfront/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKLEFTRIGHT]: {
-      spritePath: "texture/player/blockback/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKLEFTBOTTOM]: {
-      spritePath: "texture/player/blockright/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKRIGHTTOP]: {
-      spritePath: "texture/player/blockright/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKRIGHTLEFT]: {
-      spritePath: "texture/player/blockback/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKRIGHTRIGHT]: {
-      spritePath: "texture/player/blockfront/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKRIGHTBOTTOM]: {
-      spritePath: "texture/player/blockleft/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNLEFTTOP]: {
-      spritePath: "texture/player/blockturnleft/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNLEFTLEFT]: {
-      spritePath: "texture/player/blockturnleft/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNLEFTRIGHT]: {
-      spritePath: "texture/player/blockturnleft/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNLEFTBOTTOM]: {
-      spritePath: "texture/player/blockturnleft/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNRIGHTTOP]: {
-      spritePath: "texture/player/blockturnright/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNRIGHTLEFT]: {
-      spritePath: "texture/player/blockturnright/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNRIGHTRIGHT]: {
-      spritePath: "texture/player/blockturnright/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.BLOCKTURNRIGHTBOTTOM]: {
-      spritePath: "texture/player/blockturnright/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.ATTACKTOP]: {
-      spritePath: "texture/player/attack/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.ATTACKBOTTOM]: {
-      spritePath: "texture/player/attack/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.ATTACKLEFT]: {
-      spritePath: "texture/player/attack/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.ATTACKRIGHT]: {
-      spritePath: "texture/player/attack/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.DEATHTOP]: {
-      spritePath: "texture/player/death/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.DEATHBOTTOM]: {
-      spritePath: "texture/player/death/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.DEATHLEFT]: {
-      spritePath: "texture/player/death/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.DEATHRIGHT]: {
-      spritePath: "texture/player/death/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.AIRDEATHTOP]: {
-      spritePath: "texture/player/airdeath/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.AIRDEATHBOTTOM]: {
-      spritePath: "texture/player/airdeath/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.AIRDEATHLEFT]: {
-      spritePath: "texture/player/airdeath/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [PlayerState.AIRDEATHRIGHT]: {
-      spritePath: "texture/player/airdeath/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    }
-  };
+  get stateMap(): Record<PlayerState, IStateMap> {
+    return {
+      [PlayerState.TOP]: {
+        spritePath: "texture/player/idle/top",
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [PlayerState.BOTTOM]: {
+        spritePath: "texture/player/idle/bottom",
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [PlayerState.LEFT]: {
+        spritePath: "texture/player/idle/left",
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [PlayerState.RIGHT]: {
+        spritePath: "texture/player/idle/right",
+        wrapMode: AnimationClip.WrapMode.Loop
+      },
+      [PlayerState.TURNLEFTTOP]: {
+        spritePath: "texture/player/turnleft/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNLEFTLEFT]: {
+        spritePath: "texture/player/turnleft/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNLEFTRIGHT]: {
+        spritePath: "texture/player/turnleft/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNLEFTBOTTOM]: {
+        spritePath: "texture/player/turnleft/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNRIGHTTOP]: {
+        spritePath: "texture/player/turnright/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNRIGHTRIGHT]: {
+        spritePath: "texture/player/turnright/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNRIGHTBOTTOM]: {
+        spritePath: "texture/player/turnright/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.TURNRIGHTLEFT]: {
+        spritePath: "texture/player/turnright/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTOPTOP]: {
+        spritePath: "texture/player/blockfront/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTOPLEFT]: {
+        spritePath: "texture/player/blockright/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTOPRIGHT]: {
+        spritePath: "texture/player/blockleft/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTOPBOTTOM]: {
+        spritePath: "texture/player/blockback/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKBOTTOMTOP]: {
+        spritePath: "texture/player/blockback/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKBOTTOMLEFT]: {
+        spritePath: "texture/player/blockleft/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKBOTTOMRIGHT]: {
+        spritePath: "texture/player/blockright/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKBOTTOMBOTTOM]: {
+        spritePath: "texture/player/blockfront/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKLEFTTOP]: {
+        spritePath: "texture/player/blockleft/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKLEFTLEFT]: {
+        spritePath: "texture/player/blockfront/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKLEFTRIGHT]: {
+        spritePath: "texture/player/blockback/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKLEFTBOTTOM]: {
+        spritePath: "texture/player/blockright/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKRIGHTTOP]: {
+        spritePath: "texture/player/blockright/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKRIGHTLEFT]: {
+        spritePath: "texture/player/blockback/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKRIGHTRIGHT]: {
+        spritePath: "texture/player/blockfront/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKRIGHTBOTTOM]: {
+        spritePath: "texture/player/blockleft/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNLEFTTOP]: {
+        spritePath: "texture/player/blockturnleft/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNLEFTLEFT]: {
+        spritePath: "texture/player/blockturnleft/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNLEFTRIGHT]: {
+        spritePath: "texture/player/blockturnleft/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNLEFTBOTTOM]: {
+        spritePath: "texture/player/blockturnleft/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNRIGHTTOP]: {
+        spritePath: "texture/player/blockturnright/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNRIGHTLEFT]: {
+        spritePath: "texture/player/blockturnright/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNRIGHTRIGHT]: {
+        spritePath: "texture/player/blockturnright/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.BLOCKTURNRIGHTBOTTOM]: {
+        spritePath: "texture/player/blockturnright/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.ATTACKTOP]: {
+        spritePath: "texture/player/attack/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.ATTACKBOTTOM]: {
+        spritePath: "texture/player/attack/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.ATTACKLEFT]: {
+        spritePath: "texture/player/attack/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.ATTACKRIGHT]: {
+        spritePath: "texture/player/attack/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.DEATHTOP]: {
+        spritePath: "texture/player/death/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.DEATHBOTTOM]: {
+        spritePath: "texture/player/death/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.DEATHLEFT]: {
+        spritePath: "texture/player/death/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.DEATHRIGHT]: {
+        spritePath: "texture/player/death/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.AIRDEATHTOP]: {
+        spritePath: "texture/player/airdeath/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.AIRDEATHBOTTOM]: {
+        spritePath: "texture/player/airdeath/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.AIRDEATHLEFT]: {
+        spritePath: "texture/player/airdeath/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [PlayerState.AIRDEATHRIGHT]: {
+        spritePath: "texture/player/airdeath/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      }
+    };
+  }
 
   async start() {
     this.initPlayer();
@@ -283,8 +286,7 @@ export class playerHandler extends entityDynamic {
   }
 
   findEnemyOnPoint({ x, y }) {
-    const enemyList = enemyManager.enemyList;
-
+    const enemyList = Game.enemyManager.enemyList;
     return enemyList.find(
       item =>
         !item.hasDead && item.currentPoint.x === x && item.currentPoint.y === y
@@ -293,12 +295,12 @@ export class playerHandler extends entityDynamic {
 
   findDoorOnPoint({ x, y }) {
     const { x: dX, y: dY } = Game.levelInfo.doorInfo;
-    const isOpen = doorHandler.isOpen;
+    const isOpen = Game.doorHandler.state === DoorState.OPEN;
     return !isOpen && dX === x && dY === y;
   }
 
   findBrustOnPoint({ x, y }) {
-    const burstList = burstManager.burstList;
+    const burstList = Game.burstManager.burstList;
     return burstList.find(
       item =>
         !item.hasDestroy &&
@@ -824,6 +826,7 @@ export class playerHandler extends entityDynamic {
   }
 
   onMove(direction: MoveDirection) {
+    Game.addRecord();
     super.onMove(direction);
     messageCenter.publish(MessageType.onMove, {
       playerPoint: this.currentPoint,

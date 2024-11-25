@@ -34,7 +34,6 @@ import {
 import { StateManager } from "../common/stateManager";
 import { entityDynamic } from "../common/entityDynamic";
 import { Game } from "../game/game";
-import { enemyManager } from "./enemyManager";
 
 interface IStateMap {
   spritePath: string;
@@ -123,7 +122,6 @@ export class enemyHandler extends entityDynamic {
   }
 
   initAttack({ playerPoint, playerDirection }) {
-
     if (this.hasDead) return;
     const x = playerPoint.x - this.currentPoint.x;
     const y = playerPoint.y - this.currentPoint.y;
@@ -183,7 +181,7 @@ export class enemyHandler extends entityDynamic {
     }
   }
   checkAllDead() {
-    const allDead = enemyManager.enemyList.every(enemy => enemy.hasDead);
+    const allDead = Game.enemyManager.enemyList.every(enemy => enemy.hasDead);
 
     if (allDead) {
       messageCenter.publish(MessageType.onAllEnemyDead, {});

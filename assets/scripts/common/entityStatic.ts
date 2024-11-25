@@ -41,19 +41,36 @@ interface IStateMap {
 }
 
 @ccclass("entityStatic")
-export abstract class entityStatic extends Component {
+export class entityStatic extends Component {
   entity: Node;
   currentState;
   currentPoint: Record<"x" | "y", number>;
   animationComponent: AnimationComponent;
   hasDestroy: boolean = false;
-  abstract stateMap: Record<string, IStateMap>;
+
+  _stateMap: Record<string, IStateMap>;
+
+  get stateMap(): Record<string, IStateMap> {
+    return this._stateMap;
+  }
+  set stateMap(stateMap) {
+    this._stateMap = stateMap;
+  }
+
+  private static _instance: entityStatic;
+  static getInstance(context?: Component) {
+    if (!entityStatic._instance && context) {
+      entityStatic._instance = context.addComponent(this);
+    }
+    return entityStatic._instance;
+  }
 
   get state() {
     return this.currentState;
   }
 
   set state(state) {
+    if (this.currentState === state) return;
     this.currentState = state;
     this.animationComponent.play(this.currentState);
   }

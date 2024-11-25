@@ -42,26 +42,26 @@ interface IStateMap {
 
 @ccclass("smokeHandler")
 export class smokeHandler extends entityStatic {
-  entity: Node;
-
-  stateMap: Record<string, IStateMap> = {
-    [SmokeDirection.TOP]: {
-      spritePath: "texture/smoke/idle/top",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [SmokeDirection.BOTTOM]: {
-      spritePath: "texture/smoke/idle/bottom",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [SmokeDirection.LEFT]: {
-      spritePath: "texture/smoke/idle/left",
-      wrapMode: AnimationClip.WrapMode.Normal
-    },
-    [SmokeDirection.RIGHT]: {
-      spritePath: "texture/smoke/idle/right",
-      wrapMode: AnimationClip.WrapMode.Normal
-    }
-  };
+  get stateMap(): Record<string, IStateMap> {
+    return {
+      [SmokeDirection.TOP]: {
+        spritePath: "texture/smoke/idle/top",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [SmokeDirection.BOTTOM]: {
+        spritePath: "texture/smoke/idle/bottom",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [SmokeDirection.LEFT]: {
+        spritePath: "texture/smoke/idle/left",
+        wrapMode: AnimationClip.WrapMode.Normal
+      },
+      [SmokeDirection.RIGHT]: {
+        spritePath: "texture/smoke/idle/right",
+        wrapMode: AnimationClip.WrapMode.Normal
+      }
+    };
+  }
 
   protected start(): void {
     messageCenter.subscribe(MessageType.onMove, this.createSmoke, this);
