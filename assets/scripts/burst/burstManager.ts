@@ -62,5 +62,6 @@ export class burstManager extends Component {
     this.clearBurstList();
     messageCenter.unsubscribe(MessageType.nextLevel, this.clearBurstList, this);
     messageCenter.unsubscribe(MessageType.InitBurst, this.addBurst, this);
+    burstManager._instance = null;
   }
 }

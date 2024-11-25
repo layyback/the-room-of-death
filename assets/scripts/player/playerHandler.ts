@@ -244,6 +244,14 @@ export class playerHandler extends entityDynamic {
     };
   }
 
+  private static _instance: playerHandler;
+  static getInstance(context?: Component) {
+    if (!playerHandler._instance && context) {
+      playerHandler._instance = context.addComponent(this);
+    }
+    return playerHandler._instance;
+  }
+
   async start() {
     this.initPlayer();
     this.initControl();
@@ -258,6 +266,7 @@ export class playerHandler extends entityDynamic {
       this.onPlayerAttacked,
       this
     );
+    playerHandler._instance = null;
   }
 
   initPlayer() {
@@ -827,7 +836,7 @@ export class playerHandler extends entityDynamic {
 
   onMove(direction: MoveDirection) {
     Game.addRecord();
-    Game.playAudio("moveAudio");
+    Game.playAudio("move");
     super.onMove(direction);
     messageCenter.publish(MessageType.onMove, {
       playerPoint: this.currentPoint,

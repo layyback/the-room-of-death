@@ -149,10 +149,10 @@ export class Game extends Component {
   static gameOver() {
     console.log("game over");
     Game.currentLevel = 1;
+    messageCenter.removeAllSubscribers();
     messageCenter.publish(MessageType.onFade, {
       type: FadeType.OUT
     });
-    messageCenter.removeAllSubscribers();
     setTimeout(() => {
       director.loadScene("start");
     }, 0);

@@ -67,14 +67,6 @@ export class entityDynamic extends Component {
     }
   }
 
-  private static _instance: entityDynamic;
-  static getInstance(context?: Component) {
-    if (!entityDynamic._instance && context) {
-      entityDynamic._instance = context.addComponent(this);
-    }
-    return entityDynamic._instance;
-  }
-
   get direction() {
     return this.currentDirection;
   }

@@ -27,7 +27,7 @@ export class Loading extends Component {
   start() {
     console.log("loading");
     resources.preloadDir(
-      "texture",
+      "/",
       (finished, total) => {
         this.getComponent(ProgressBar).progress = finished / total;
         this.getComponentInChildren(

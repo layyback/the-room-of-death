@@ -176,6 +176,9 @@ export class enemyHandler extends entityDynamic {
     if (currentPoint.x === enemyPoint.x && currentPoint.y === enemyPoint.y) {
       this.onDeath(DeathDirection[`DEATH${this.currentDirection}`]);
       this.scheduleOnce(() => {
+        Game.playAudio("enemydeath");
+      }, 0.5);
+      this.scheduleOnce(() => {
         this.checkAllDead();
       }, 1);
     }

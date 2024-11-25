@@ -57,20 +57,11 @@ export class entityStatic extends Component {
     this._stateMap = stateMap;
   }
 
-  private static _instance: entityStatic;
-  static getInstance(context?: Component) {
-    if (!entityStatic._instance && context) {
-      entityStatic._instance = context.addComponent(this);
-    }
-    return entityStatic._instance;
-  }
-
   get state() {
     return this.currentState;
   }
 
   set state(state) {
-    if (this.currentState === state) return;
     this.currentState = state;
     this.animationComponent.play(this.currentState);
   }

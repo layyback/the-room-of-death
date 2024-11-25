@@ -67,6 +67,12 @@ export class burstHandler extends entityStatic {
     };
   }
 
+  set state(state: BurstState) {
+    if (this.currentState === state) return;
+    this.currentState = state;
+    this.animationComponent.play(this.currentState);
+  }
+
   constructor(burstInfo) {
     super();
     this.init(burstInfo);

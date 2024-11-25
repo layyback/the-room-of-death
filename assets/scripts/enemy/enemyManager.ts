@@ -53,6 +53,7 @@ export class enemyManager extends Component {
     this.clearEnemyList();
     messageCenter.unsubscribe(MessageType.nextLevel, this.clearEnemyList, this);
     messageCenter.unsubscribe(MessageType.InitEnemy, this.addEnemy, this);
+    enemyManager._instance = null;
   }
 
   clearEnemyList() {

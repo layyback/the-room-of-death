@@ -54,6 +54,7 @@ export class spikeManager extends Component {
     this.clearSpikeList();
     messageCenter.unsubscribe(MessageType.InitSpike, this.addSpike, this);
     messageCenter.unsubscribe(MessageType.nextLevel, this.clearSpikeList, this);
+    spikeManager._instance = null;
   }
 
   addSpike(spikeInfo) {

@@ -43,7 +43,7 @@ interface IStateMap {
 
 @ccclass("doorHandler")
 export class doorHandler extends entityStatic {
-  currentState: DoorState = DoorState.Y;
+  currentState: DoorState;
   initState: DoorState = DoorState.Y;
   get stateMap(): Record<string, IStateMap> {
     return {
@@ -62,6 +62,14 @@ export class doorHandler extends entityStatic {
     };
   }
 
+  private static _instance: doorHandler;
+  static getInstance(context?: Component) {
+    if (!doorHandler._instance && context) {
+      doorHandler._instance = context.addComponent(this);
+    }
+    return doorHandler._instance;
+  }
+
   protected start(): void {
     messageCenter.subscribe(MessageType.InitDoor, this.init, this);
     messageCenter.subscribe(MessageType.onMove, this.onMove, this);
@@ -74,6 +82,7 @@ export class doorHandler extends entityStatic {
     messageCenter.unsubscribe(MessageType.onMove, this.onMove, this);
     messageCenter.unsubscribe(MessageType.onAllEnemyDead, this.openDoor, this);
     messageCenter.unsubscribe(MessageType.nextLevel, this.resetDoor, this);
+    doorHandler._instance = null;
   }
 
   async init(doorInfo) {
@@ -95,6 +104,7 @@ export class doorHandler extends entityStatic {
 
   openDoor() {
     this.state = DoorState.OPEN;
+    Game.playAudio("dooropen");
   }
 
   resetDoor() {

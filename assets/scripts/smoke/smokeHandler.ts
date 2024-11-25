@@ -63,6 +63,14 @@ export class smokeHandler extends entityStatic {
     };
   }
 
+  private static _instance: smokeHandler;
+  static getInstance(context?: Component) {
+    if (!smokeHandler._instance && context) {
+      smokeHandler._instance = context.addComponent(this);
+    }
+    return smokeHandler._instance;
+  }
+
   protected start(): void {
     messageCenter.subscribe(MessageType.onMove, this.createSmoke, this);
     messageCenter.subscribe(MessageType.nextLevel, this.resetEntity, this);
@@ -71,6 +79,7 @@ export class smokeHandler extends entityStatic {
   protected onDestroy(): void {
     messageCenter.unsubscribe(MessageType.onMove, this.createSmoke, this);
     messageCenter.unsubscribe(MessageType.nextLevel, this.resetEntity, this);
+    smokeHandler._instance = null;
   }
 
   resetEntity() {
