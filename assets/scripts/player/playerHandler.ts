@@ -827,6 +827,7 @@ export class playerHandler extends entityDynamic {
 
   onMove(direction: MoveDirection) {
     Game.addRecord();
+    Game.playAudio("moveAudio");
     super.onMove(direction);
     messageCenter.publish(MessageType.onMove, {
       playerPoint: this.currentPoint,

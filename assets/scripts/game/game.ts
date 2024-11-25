@@ -13,7 +13,9 @@ import {
   Event,
   director,
   find,
-  Label
+  Label,
+  AudioSource,
+  AudioClip
 } from "cc";
 const { ccclass, property } = _decorator;
 import level from "../level/level";
@@ -29,10 +31,11 @@ import { smokeHandler } from "../smoke/smokeHandler";
 import { spikeManager } from "../spike/spikeManager";
 import { burstManager } from "../burst/burstManager";
 import { shakeEffect } from "../map/shake";
+import { audioManager } from "./audio";
 
 @ccclass("Game")
 export class Game extends Component {
-  static currentLevel: number = 8;
+  static currentLevel: number = 1;
   static stepRecord: Array<{
     playerHandler;
     enemyManager;
@@ -47,6 +50,7 @@ export class Game extends Component {
   static enemyManager;
   static spikeManager;
   static burstManager;
+  static audioManager;
 
   static get levelInfo() {
     return level[`level${Game.currentLevel}`];
@@ -153,6 +157,11 @@ export class Game extends Component {
       director.loadScene("start");
     }, 0);
   }
+
+  static playAudio(audioName: string) {
+    Game.audioManager.play(audioName);
+  }
+
   start() {
     console.log("game start");
     messageCenter.publish(MessageType.onFade, {
@@ -166,6 +175,7 @@ export class Game extends Component {
     Game.spikeManager = spikeManager.getInstance(this);
     Game.burstManager = burstManager.getInstance(this);
 
+    Game.audioManager = this.addComponent(audioManager);
     this.addComponent(shakeEffect);
     this.addComponent(mapManager);
     this.addComponent(Keyboard);
