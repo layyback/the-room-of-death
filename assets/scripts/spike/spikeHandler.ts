@@ -94,6 +94,7 @@ export class spikeHandler extends entityStatic {
     super.init({ point, position, state: SpikeType.ZERO });
 
     messageCenter.subscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.subscribe(MessageType.onAttacked, this.initAttack, this);
     messageCenter.subscribe(MessageType.nextLevel, this.onNextLevel, this);
 
     this.animationComponent.on(
@@ -105,6 +106,7 @@ export class spikeHandler extends entityStatic {
 
   protected onDestroy(): void {
     messageCenter.unsubscribe(MessageType.onMove, this.initAttack, this);
+    messageCenter.unsubscribe(MessageType.onAttacked, this.initAttack, this);
     messageCenter.unsubscribe(MessageType.nextLevel, this.onNextLevel, this);
   }
 
