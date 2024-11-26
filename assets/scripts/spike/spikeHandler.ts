@@ -116,11 +116,11 @@ export class spikeHandler extends entityStatic {
   initAttack({ playerPoint, playerDirection }) {
     if (this.hasDestroy) return;
     this.currentStep++;
-    if (this.currentStep >= this.maxStep) {
-      this.checkAttack();
-    }
     this.state = SpikeStep[this.currentStep];
     this.playerPoint = playerPoint;
+    // if (this.currentStep >= this.maxStep) {
+    this.checkAttack();
+    // }
   }
 
   onAnimationFinished() {
@@ -133,7 +133,7 @@ export class spikeHandler extends entityStatic {
   checkAttack() {
     const { x, y } = this.playerPoint;
     const { x: pX, y: pY } = this.currentPoint;
-    if (x === pX && y === pY) {
+    if (this.currentStep >= this.maxStep && x === pX && y === pY) {
       messageCenter.publish(MessageType.onPlayerAttacked, {});
     }
   }

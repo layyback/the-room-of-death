@@ -72,6 +72,9 @@ export class burstHandler extends entityStatic {
     this.currentState = state;
     this.animationComponent.play(this.currentState);
   }
+  get state(): BurstState {
+    return this.currentState;
+  }
 
   constructor(burstInfo) {
     super();
@@ -102,6 +105,7 @@ export class burstHandler extends entityStatic {
       this.currentStep > 0
     ) {
       this.currentStep++;
+      this.playerPoint = playerPoint;
       if (this.currentStep >= maxStep) {
         this.currentStep = maxStep;
         this.onAttack();
@@ -116,13 +120,11 @@ export class burstHandler extends entityStatic {
         }, 0.15);
       }
     }
-    this.playerPoint = playerPoint;
   }
 
   onAttack() {
     const { x, y } = this.playerPoint;
     const { x: pX, y: pY } = this.currentPoint;
-
     if (x === pX && y === pY) {
       messageCenter.publish(MessageType.onPlayerAttacked, {
         type: PlayerDeathType.AIRDEATH
