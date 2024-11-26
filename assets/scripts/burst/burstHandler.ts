@@ -106,6 +106,7 @@ export class burstHandler extends entityStatic {
         this.currentStep = maxStep;
         this.onAttack();
         this.hasDestroy = true;
+        Game.playAudio("burstdeath");
         this.scheduleOnce(() => {
           this.state = BurstState.DEATH;
         }, 0.15);

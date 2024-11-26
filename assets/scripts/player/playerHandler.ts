@@ -851,6 +851,9 @@ export class playerHandler extends entityDynamic {
     this.scheduleOnce(() => {
       this.handleShake(this.currentDirection);
       // Game.gameOver();
+      // this.scheduleOnce(() => {
+      Game.playAudio("playerdeath");
+      // }, 0.5);
     }, 0.5);
   }
 

@@ -31,7 +31,7 @@ import { smokeHandler } from "../smoke/smokeHandler";
 import { spikeManager } from "../spike/spikeManager";
 import { burstManager } from "../burst/burstManager";
 import { shakeEffect } from "../map/shake";
-import { audioManager } from "./audio";
+import { AudioManager } from "./audio";
 
 @ccclass("Game")
 export class Game extends Component {
@@ -159,7 +159,8 @@ export class Game extends Component {
   }
 
   static playAudio(audioName: string) {
-    Game.audioManager.play(audioName);
+    const audio = AudioManager.inst;
+    audio.playOneShot(audioName);
   }
 
   start() {
@@ -175,7 +176,6 @@ export class Game extends Component {
     Game.spikeManager = spikeManager.getInstance(this);
     Game.burstManager = burstManager.getInstance(this);
 
-    Game.audioManager = this.addComponent(audioManager);
     this.addComponent(shakeEffect);
     this.addComponent(mapManager);
     this.addComponent(Keyboard);

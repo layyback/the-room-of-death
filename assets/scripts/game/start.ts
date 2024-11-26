@@ -21,6 +21,7 @@ const { ccclass, property } = _decorator;
 import { loadReources } from "../utils";
 import { MessageType, messageCenter } from "./messageCenter";
 import { FadeType, MoveDirection } from "../utils/enum";
+import { AudioManager } from "./audio";
 
 @ccclass("Start")
 export class Start extends Component {
@@ -28,6 +29,8 @@ export class Start extends Component {
     messageCenter.publish(MessageType.onFade, {
       type: FadeType.IN
     });
+    const audio = AudioManager.inst;
+    audio.play("bgm2");
   }
   startGame() {
     messageCenter.publish(MessageType.onFade, {
