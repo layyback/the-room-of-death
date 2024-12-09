@@ -1,4 +1,4 @@
-run = "node --enable-source-maps .build/index.js"
+run = "build/web-mobile/index.html"
 language = "node"
 
 [env]
